@@ -14,10 +14,19 @@ public abstract class Post
 	private File file;
 	private String title;
 	private ArrayList<String> categories;
+	private ArrayList<String> tags;
+	
+	private Post()
+	{
+		this.categories = new ArrayList<String>();
+		this.tags = new ArrayList<String>();
+	}
 	
 	// Load already exists post
 	public Post( File file )
 	{
+		this();
+		
 		this.file = file;
 		
 		try
@@ -28,7 +37,7 @@ public abstract class Post
 			HashMap<String, String> frontMatterFields = frontMatterParser.parse();
 			
 			this.parseGeneralFrontMatter( frontMatterFields ); // The common parts of the Front Matter such as title and categories.
-			this.parseFrontMatter( frontMatterFields ); // For children to parse their own fields in the Front Matter.
+			this.parseFrontMatter( frontMatterFields ); // For children to use their own fields in the Front Matter.
 		} 
 		catch ( FileNotFoundException e ) { e.printStackTrace(); }
 		catch ( IOException e ) { e.printStackTrace(); }
@@ -38,17 +47,55 @@ public abstract class Post
 	// Create a new post
 	public Post( String title )
 	{
+		this();
+		
 		this.title = title;
 	}
 	
 	private void parseGeneralFrontMatter( HashMap<String, String> frontMatter )
 	{
 		this.title = frontMatter.get( "title" ).replace( "\"", "" );
+		
+		// ... //
+		
+		if ( frontMatter.get( "category" ) != null )
+			this.categories.add( frontMatter.get( "category" ) );
+		
+		if ( frontMatter.get( "categories" ) != null )
+		{
+			String[] categories = frontMatter.get( "categories" ).replace( "[", "" ).replace( "]", "" ).split( "," );
+			
+			for ( int s = 0; s < categories.length; s++ )
+				this.categories.add( categories[ s ] );
+		}
+		
+		// ... //
+		
+		if ( frontMatter.get( "tag" ) != null )
+			this.tags.add( frontMatter.get( "tag" ) );
+		
+		if ( frontMatter.get( "tags" ) != null )
+		{
+			String[] tags = frontMatter.get( "tags" ).replace( "[", "" ).replace( "]", "" ).split( "," );
+			
+			for ( int s = 0; s < tags.length; s++ )
+				this.tags.add( tags[ s ] );
+		}
 	}
 	
 	public String getTitle()
 	{
 		return this.title;
+	}
+	
+	public ArrayList<String> getCategories()
+	{
+		return this.categories;
+	}
+	
+	public ArrayList<String> getTags()
+	{
+		return this.tags;
 	}
 	
 	abstract protected void parseFrontMatter( HashMap<String, String> frontMatter );

@@ -9,7 +9,7 @@ public class Main
 	{
 		Blog devBlog = new Blog( "/home/maastaar/jekyll/EasyJekyllDev" );
 		
-		System.out.println( devBlog.getPostsList().get( 0 ).getTitle() );
+		System.out.println( devBlog.getPostsList().get( 0 ).getCategories().get( 0 ) );
 		System.out.println( devBlog.getPostsList().get( 1 ).getTitle() );
 	}
 }
