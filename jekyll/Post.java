@@ -13,31 +13,44 @@ public abstract class Post
 {
 	private File file;
 	private String title;
+	private String content;
 	private ArrayList<String> categories;
 	private ArrayList<String> tags;
+	private boolean newPost;
+	protected Blog blog;
+	protected File postDir;
+	protected HashMap<String, String> frontMatter;
 	
-	private Post()
+	private Post( Blog blog )
 	{
 		this.categories = new ArrayList<String>();
 		this.tags = new ArrayList<String>();
+		this.content = "";
+		this.blog = blog;
 	}
 	
 	// Load already exists post
-	public Post( File file )
+	public Post( File file, Blog blog )
 	{
-		this();
+		this( blog );
 		
 		this.file = file;
+		this.newPost = false;
 		
 		try
 		{
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			
 			FrontMatterParser frontMatterParser = new FrontMatterParser( reader );
-			HashMap<String, String> frontMatterFields = frontMatterParser.parse();
+			frontMatter = frontMatterParser.parse();
 			
-			this.parseGeneralFrontMatter( frontMatterFields ); // The common parts of the Front Matter such as title and categories.
-			this.parseFrontMatter( frontMatterFields ); // For children to use their own fields in the Front Matter.
+			this.parseGeneralFrontMatter(); // The common parts of the Front Matter such as title and categories.
+			this.parseFrontMatter(); // For children to use their own fields in the Front Matter.
+			
+			String line;
+			
+			while ( ( line = reader.readLine() ) != null )
+				this.content += line + "\n";
 		} 
 		catch ( FileNotFoundException e ) { e.printStackTrace(); }
 		catch ( IOException e ) { e.printStackTrace(); }
@@ -45,25 +58,26 @@ public abstract class Post
 
 
 	// Create a new post
-	public Post( String title )
+	public Post( String title, Blog blog )
 	{
-		this();
+		this( blog );
 		
 		this.title = title;
+		this.newPost = true;
 	}
 	
-	private void parseGeneralFrontMatter( HashMap<String, String> frontMatter )
+	private void parseGeneralFrontMatter()
 	{
-		this.title = frontMatter.get( "title" ).replace( "\"", "" );
+		this.title = this.frontMatter.get( "title" ).replace( "\"", "" );
 		
 		// ... //
 		
 		if ( frontMatter.get( "category" ) != null )
-			this.categories.add( frontMatter.get( "category" ) );
+			this.categories.add( this.frontMatter.get( "category" ) );
 		
 		if ( frontMatter.get( "categories" ) != null )
 		{
-			String[] categories = frontMatter.get( "categories" ).replace( "[", "" ).replace( "]", "" ).split( "," );
+			String[] categories = this.frontMatter.get( "categories" ).replace( "[", "" ).replace( "]", "" ).split( "," );
 			
 			for ( int s = 0; s < categories.length; s++ )
 				this.categories.add( categories[ s ] );
@@ -72,15 +86,27 @@ public abstract class Post
 		// ... //
 		
 		if ( frontMatter.get( "tag" ) != null )
-			this.tags.add( frontMatter.get( "tag" ) );
+			this.tags.add( this.frontMatter.get( "tag" ) );
 		
 		if ( frontMatter.get( "tags" ) != null )
 		{
-			String[] tags = frontMatter.get( "tags" ).replace( "[", "" ).replace( "]", "" ).split( "," );
+			String[] tags = this.frontMatter.get( "tags" ).replace( "[", "" ).replace( "]", "" ).split( "," );
 			
 			for ( int s = 0; s < tags.length; s++ )
 				this.tags.add( tags[ s ] );
 		}
+	}
+	
+	public void save()
+	{
+		/*if ( this.newPost )
+		{
+			//
+			//this.file = new File();
+		}*/
+		
+		System.out.println( this.generateFilename() );
+			
 	}
 	
 	public String getTitle()
@@ -88,9 +114,19 @@ public abstract class Post
 		return this.title;
 	}
 	
+	public void setTitle( String title )
+	{
+		this.title = title;
+	}
+	
 	public ArrayList<String> getCategories()
 	{
 		return this.categories;
+	}
+	
+	public void addCategory( String category )
+	{
+		this.categories.add( category );
 	}
 	
 	public ArrayList<String> getTags()
@@ -98,7 +134,25 @@ public abstract class Post
 		return this.tags;
 	}
 	
-	abstract protected void parseFrontMatter( HashMap<String, String> frontMatter );
+	public void addTag( String tag )
+	{
+		this.tags.add( tag );
+	}
+	
+	public String getContent()
+	{
+		return this.content;
+	}
+	
+	public void setContent( String content )
+	{
+		this.content = content;
+	}
+	
+	protected HashMap<String, String> getFrontMatter()
+	{
+		return this.frontMatter;
+	}
 	
 	public static String parseTitleFromFilename( String filename, boolean withDate )
 	{
@@ -114,4 +168,7 @@ public abstract class Post
 		
 		return title;
 	}
+	
+	abstract protected void parseFrontMatter();
+	abstract protected String generateFilename();
 }

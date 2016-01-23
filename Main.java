@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import jekyll.Blog;
+import jekyll.PublishedPost;
 
 public class Main
 {
@@ -9,7 +7,7 @@ public class Main
 	{
 		Blog devBlog = new Blog( "/home/maastaar/jekyll/EasyJekyllDev" );
 		
-		System.out.println( devBlog.getPostsList().get( 0 ).getCategories().get( 0 ) );
-		System.out.println( devBlog.getPostsList().get( 1 ).getTitle() );
+		PublishedPost firstPost = devBlog.createPost( "First Post From EasyJekyll!" );
+		firstPost.save();
 	}
 }

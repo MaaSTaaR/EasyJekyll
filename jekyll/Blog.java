@@ -19,6 +19,21 @@ public class Blog
 		this.draftsDir = new File( this.path.getPath() + "/_drafts" );
 	}
 	
+	public PublishedPost createPost( String title )
+	{
+		return new PublishedPost( title, this );
+	}
+	
+	public File getPostsDir()
+	{
+		return this.postsDir;
+	}
+	
+	public File getDraftsDir()
+	{
+		return this.draftsDir;
+	}
+	
 	public ArrayList<String> getPostsTitles()
 	{
 		return this.getTitles( this.postsDir, false );
@@ -35,7 +50,7 @@ public class Blog
 		
 		for ( File currPost: this.postsDir.listFiles() )
 			if ( !currPost.isDirectory() )
-				posts.add( new PublishedPost( currPost ) );
+				posts.add( new PublishedPost( currPost, this ) );
 		
 		return posts;
 	}
