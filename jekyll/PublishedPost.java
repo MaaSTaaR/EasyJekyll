@@ -31,6 +31,16 @@ public class PublishedPost extends Post
 	
 	public String getDate()
 	{
+		return this.date.split( " " )[ 0 ];
+	}
+	
+	public String getTime()
+	{
+		return this.date.split( " " )[ 1 ];
+	}
+	
+	public String getPostDate()
+	{
 		return this.date;
 	}
 	
@@ -38,9 +48,6 @@ public class PublishedPost extends Post
 	public void save()
 	{
 		this.postDir = this.blog.getPostsDir();
-		
-		System.out.println( this.getDate() );
-		
 		super.save();
 	}
 	
@@ -58,6 +65,14 @@ public class PublishedPost extends Post
 	@Override
 	protected String generateFilename()
 	{
-		return this.getTitle();
+		return this.getDate() + "-" + Post.getFilenameFromTitle( this.getTitle() );
+	}
+
+	@Override
+	protected String generateFrontMatter()
+	{
+		String postFrontMatter = "date: " + this.getPostDate() + "\n";
+		
+		return postFrontMatter;
 	}
 }

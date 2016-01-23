@@ -5,14 +5,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public abstract class Post
 {
 	private File file;
-	private String title;
+	private String title = null;
 	private String content;
 	private ArrayList<String> categories;
 	private ArrayList<String> tags;
@@ -20,6 +22,7 @@ public abstract class Post
 	protected Blog blog;
 	protected File postDir;
 	protected HashMap<String, String> frontMatter;
+	private boolean titleChanged = false;
 	
 	private Post( Blog blog )
 	{
@@ -62,7 +65,7 @@ public abstract class Post
 	{
 		this( blog );
 		
-		this.title = title;
+		this.setTitle( title );
 		this.newPost = true;
 	}
 	
@@ -99,14 +102,84 @@ public abstract class Post
 	
 	public void save()
 	{
-		/*if ( this.newPost )
-		{
-			//
-			//this.file = new File();
-		}*/
+		String fileContent;
 		
-		System.out.println( this.generateFilename() );
+		if ( this.newPost )
+		{
+			this.file = new File( this.getPostDir().getAbsolutePath() + "/" + this.generateFilename() );
 			
+			try 
+			{
+				this.file.createNewFile();
+			} catch ( IOException e ) { e.printStackTrace(); }
+		}
+		else
+		{
+			if ( this.titleChanged )
+			{
+				// TODO: The title of already exists post has been changed. The filename should be changed
+			}
+		}
+		
+		String frontMatter = "---\n" + this.generateGeneralFrontMatter() + this.generateFrontMatter() + "---\n";
+		
+		fileContent = frontMatter + this.getContent();
+		
+		try 
+		{
+			FileWriter writer = new FileWriter( this.file );
+			writer.write( fileContent );
+			writer.close();
+		} catch ( IOException e ) { e.printStackTrace(); }
+	}
+	
+	private String generateGeneralFrontMatter()
+	{
+		String generalFrontMatter = "title: \"" + this.getTitle() + "\"\n";
+		
+		if ( this.categories.size() > 0 )
+		{
+			generalFrontMatter += "categories: [";
+			
+			Iterator<String> catIt = this.categories.iterator();
+			
+			while ( catIt.hasNext() )
+			{
+				String currCat = catIt.next();
+				
+				generalFrontMatter += currCat;
+				
+				if ( catIt.hasNext() )
+					generalFrontMatter += ",";
+			}
+			
+			generalFrontMatter += "]\n";
+		}
+		
+		// ... //
+		
+		if ( this.tags.size() > 0 )
+		{
+			generalFrontMatter += "tags: [";
+			
+			Iterator<String> tagsIt = this.tags.iterator();
+			
+			while ( tagsIt.hasNext() )
+			{
+				String currTag = tagsIt.next();
+				
+				generalFrontMatter += currTag;
+				
+				if ( tagsIt.hasNext() )
+					generalFrontMatter += ",";
+			}
+			
+			generalFrontMatter += "]\n";
+		}
+		
+		// ... //
+		
+		return generalFrontMatter;
 	}
 	
 	public String getTitle()
@@ -116,6 +189,9 @@ public abstract class Post
 	
 	public void setTitle( String title )
 	{
+		if ( this.title != null )
+			this.titleChanged = true;
+			
 		this.title = title;
 	}
 	
@@ -149,6 +225,11 @@ public abstract class Post
 		this.content = content;
 	}
 	
+	public File getPostDir()
+	{
+		return this.postDir;
+	}
+	
 	protected HashMap<String, String> getFrontMatter()
 	{
 		return this.frontMatter;
@@ -169,6 +250,25 @@ public abstract class Post
 		return title;
 	}
 	
+	public static String getFilenameFromTitle( String title )
+	{
+		String[] titleParts = title.split( " " );
+		String filename = "";
+		
+		for ( int startIdx = 0; startIdx < titleParts.length; startIdx++ )
+		{
+			filename += titleParts[ startIdx ];
+			
+			if ( ( startIdx + 1 ) < titleParts.length )
+				filename += "-";
+		}
+		
+		filename += ".md";
+		
+		return filename.toLowerCase();
+	}
+	
 	abstract protected void parseFrontMatter();
+	abstract protected String generateFrontMatter();
 	abstract protected String generateFilename();
 }

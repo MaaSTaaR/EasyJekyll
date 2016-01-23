@@ -36,6 +36,12 @@ public class Draft extends Post
 	@Override
 	protected String generateFilename()
 	{
-		return this.getTitle();
+		return Post.getFilenameFromTitle( this.getTitle() );
+	}
+
+	@Override
+	protected String generateFrontMatter()
+	{
+		return "";
 	}
 }

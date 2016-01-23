@@ -24,6 +24,11 @@ public class Blog
 		return new PublishedPost( title, this );
 	}
 	
+	public Draft createDraft( String title )
+	{
+		return new Draft( title, this );
+	}
+	
 	public File getPostsDir()
 	{
 		return this.postsDir;
