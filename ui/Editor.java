@@ -11,12 +11,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -31,8 +34,10 @@ public class Editor
 {
 	private JFrame mainWin;
 	private JPanel mainPane;
-	private Post currPost;
 	private JTextPane editor;
+	private EditorStatusbar statusbar;
+	
+	private Post currPost;
 	
 	private final Color titleColor = new Color( 0, 85, 128 );
 	private final String titleAndContentSeparator = "\n\n";
@@ -41,10 +46,17 @@ public class Editor
 	{
 		this.currPost = currPost;
 		
+		this.mainWin = new JFrame();
 		this.editor = new JTextPane();
+		this.statusbar = new EditorStatusbar( this );
 		
 		setNativeLookAndFeel();
 		createEditorWindow();
+	}
+	
+	private void refreshEditorTitle()
+	{
+		this.mainWin.setTitle( "Editing: " + this.currPost.getTitle() );
 	}
 	
 	private void setNativeLookAndFeel()
@@ -65,29 +77,34 @@ public class Editor
 		
 		// ... //
 		
-		this.mainWin = new JFrame( "Editing: " + this.currPost.getTitle() );
-		
 		this.mainWin.setExtendedState( JFrame.MAXIMIZED_BOTH );
 		this.mainWin.setContentPane( mainPane );
 		
 		// ... //
 		
+		this.refreshEditorTitle();
 		this.createWidgets();
 		
 		// ... //
 		
-		mainWin.setVisible( true );
+		this.mainWin.setVisible( true );
 	}
 	
 	private void createWidgets()
 	{
 		this.createToolbar();
 		this.createWorkspace();
+		this.createStatusbar();
 	}
 	
 	private void createToolbar()
 	{
 		this.mainPane.add( new EditorToolbar( this, this.currPost ), BorderLayout.PAGE_START );
+	}
+	
+	private void createStatusbar()
+	{
+		this.mainPane.add( this.statusbar, BorderLayout.PAGE_END );
 	}
 	
 	private void createWorkspace()
@@ -96,19 +113,19 @@ public class Editor
 		{
 			DefaultStyledDocument document = new DefaultStyledDocument();
 			
-			editor.setDocument( document );
+			this.editor.setDocument( document );
 		
 			document.insertString( 0, this.currPost.getTitle(), this.getTitleFormat() );
 			document.insertString( this.currPost.getTitle().length(), this.titleAndContentSeparator + this.currPost.getContent(), this.getContentFormat() );
 			
 			// ... //
 			
-			editor.setCaretPosition( 0 );
+			this.editor.setCaretPosition( 0 );
 			
 			// ... //
 			
-			JScrollPane scrolledEditor = new JScrollPane( editor );
-		
+			JScrollPane scrolledEditor = new JScrollPane( this.editor );
+			
 			this.mainPane.add( scrolledEditor, BorderLayout.CENTER );
 
 		}
@@ -157,11 +174,12 @@ public class Editor
 	{
 		if ( succeed )
 		{
-			this.mainWin.setTitle( "Editing " + this.currPost.getTitle() );
+			this.refreshEditorTitle();
+			this.statusbar.setStatusMessage( "Saved", EditorStatusbar.StatusType.SUCCESS );
 		}
 		else
 		{
-			// God, Help us!
+			this.statusbar.setStatusMessage( "Could not save the file!", EditorStatusbar.StatusType.ERROR );
 		}
 	}
 }
