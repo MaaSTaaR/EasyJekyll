@@ -10,6 +10,8 @@ public class Blog
 	private File postsDir;
 	private File draftsDir;
 	
+	public static enum ContentType { PUBLISHED, DRAFT };
+	
 	// deploy
 	
 	public Blog( String path )
@@ -39,7 +41,7 @@ public class Blog
 		return this.draftsDir;
 	}
 	
-	public ArrayList<String> getPostsTitles()
+	/*public ArrayList<String> getPostsTitles()
 	{
 		return this.getTitles( this.postsDir, false );
 	}
@@ -47,11 +49,11 @@ public class Blog
 	public ArrayList<String> getDraftsTitles()
 	{
 		return this.getTitles( this.draftsDir, true );
-	}
+	}*/
 	
-	public ArrayList<Post> getPostsList()
+	public ArrayList<PublishedPost> getPostsList()
 	{
-		ArrayList<Post> posts = new ArrayList<Post>();
+		ArrayList<PublishedPost> posts = new ArrayList<PublishedPost>();
 		
 		for ( File currPost: this.postsDir.listFiles() )
 			if ( !currPost.isDirectory() )
@@ -60,7 +62,31 @@ public class Blog
 		return posts;
 	}
 	
-	private ArrayList<String> getTitles( File dir, boolean isDraft )
+	public ArrayList<Draft> getDraftsList()
+	{
+		ArrayList<Draft> drafts = new ArrayList<Draft>();
+		
+		for ( File currDraft: this.draftsDir.listFiles() )
+			if ( !currDraft.isDirectory() )
+				drafts.add( new Draft( currDraft, this ) );
+		
+		return drafts;
+	}
+	
+	public ArrayList<Post> getPosts( ContentType type )
+	{
+		ArrayList<Post> posts = new ArrayList<Post>();
+		
+		File source = ( type == ContentType.PUBLISHED ) ? this.postsDir : this.draftsDir;
+		
+		for ( File currPost: source.listFiles() )
+			if ( !currPost.isDirectory() )
+				posts.add( new PublishedPost( currPost, this ) );
+		
+		return posts;
+	}
+	
+	/*private ArrayList<String> getTitles( File dir, boolean isDraft )
 	{
 		ArrayList<String> titles = new ArrayList<String>();
 		
@@ -74,7 +100,7 @@ public class Blog
 			}
 		
 		return titles;
-	}
+	}*/
 	
 	
 }

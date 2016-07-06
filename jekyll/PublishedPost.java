@@ -5,12 +5,11 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 public class PublishedPost extends Post
 {
 	private String date;
-	private DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+	private static DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 	
 	public PublishedPost( File file, Blog blog )
 	{
@@ -21,7 +20,7 @@ public class PublishedPost extends Post
 	{
 		super( title, blog );
 		
-		this.date = this.postDateFormat.format( new Date() );
+		this.date = postDateFormat.format( new Date() );
 	}
 
 	public static String parseTitleFromFilename( String filename )
@@ -56,7 +55,7 @@ public class PublishedPost extends Post
 	{
 		String loadedDate = this.frontMatter.get( "date" );
 		
-		if ( date == null )
+		if ( loadedDate == null )
 			this.date = this.postDateFormat.format( new Date() );
 		else
 			this.date = loadedDate;	

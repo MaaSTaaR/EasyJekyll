@@ -1,7 +1,6 @@
 package jekyll;
 
 import java.io.File;
-import java.util.HashMap;
 
 public class Draft extends Post
 {
