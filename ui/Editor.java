@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,12 +32,16 @@ public class Editor
 	private JFrame mainWin;
 	private JPanel mainPane;
 	private Post currPost;
-	private final Color titleColor = new Color( 0, 85, 128 );
 	private JTextPane editor;
+	
+	private final Color titleColor = new Color( 0, 85, 128 );
+	private final String titleAndContentSeparator = "\n\n";
 	
 	public Editor( Post currPost )
 	{
 		this.currPost = currPost;
+		
+		this.editor = new JTextPane();
 		
 		setNativeLookAndFeel();
 		createEditorWindow();
@@ -56,17 +61,13 @@ public class Editor
 	
 	private void createEditorWindow()
 	{
-		this.mainPane = new JPanel();
-		
-		this.mainPane.setLayout( new BoxLayout( mainPane, BoxLayout.PAGE_AXIS ) );
+		this.mainPane = new JPanel( new BorderLayout() );
 		
 		// ... //
 		
 		this.mainWin = new JFrame( "Editing: " + this.currPost.getTitle() );
 		
 		this.mainWin.setExtendedState( JFrame.MAXIMIZED_BOTH );
-		//this.mainWin.setSize( 600, 600 );
-		//this.mainWin.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		this.mainWin.setContentPane( mainPane );
 		
 		// ... //
@@ -86,44 +87,19 @@ public class Editor
 	
 	private void createToolbar()
 	{
-		JToolBar toolbar = new JToolBar();
-		
-		JButton saveBtn = new JButton( "Save" );
-		
-		saveBtn.addActionListener( new ActionListener() 
-		{
-			@Override
-			public void actionPerformed( ActionEvent arg0 )
-			{
-				try
-				{
-					currPost.setContent( editor.getText( currPost.getTitle().length() + 2, editor.getText().length() - ( currPost.getTitle().length() + 2 ) ) );
-					
-					currPost.save();
-				}
-				catch ( BadLocationException e ) { e.printStackTrace(); }
-			}	
-		});
-		
-		toolbar.add( saveBtn );
-		
-		this.mainPane.add( toolbar, BorderLayout.PAGE_START );
+		this.mainPane.add( new EditorToolbar( this, this.currPost ), BorderLayout.PAGE_START );
 	}
 	
 	private void createWorkspace()
 	{
 		try
 		{
-			editor = new JTextPane();
-		
-			// ... //
-			
 			DefaultStyledDocument document = new DefaultStyledDocument();
 			
 			editor.setDocument( document );
 		
 			document.insertString( 0, this.currPost.getTitle(), this.getTitleFormat() );
-			document.insertString( this.currPost.getTitle().length(), "\n\n" + this.currPost.getContent(), this.getContentFormat() );
+			document.insertString( this.currPost.getTitle().length(), this.titleAndContentSeparator + this.currPost.getContent(), this.getContentFormat() );
 			
 			// ... //
 			
@@ -133,7 +109,7 @@ public class Editor
 			
 			JScrollPane scrolledEditor = new JScrollPane( editor );
 		
-			this.mainPane.add( scrolledEditor );
+			this.mainPane.add( scrolledEditor, BorderLayout.CENTER );
 
 		}
 		catch ( BadLocationException e ) { e.printStackTrace(); }
@@ -160,5 +136,20 @@ public class Editor
 		attributes = styleContext.addAttribute( attributes, StyleConstants.FontSize, 35 );
 		
 		return attributes;
+	}
+	
+	private String getText()
+	{
+		return this.editor.getText();
+	}
+	
+	public String getTitle()
+	{
+		return this.getText().split( this.titleAndContentSeparator, 2 )[ 0 ];
+	}
+	
+	public String getContent()
+	{
+		return this.getText().split( this.titleAndContentSeparator, 2 )[ 1 ];
 	}
 }

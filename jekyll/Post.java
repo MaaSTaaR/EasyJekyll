@@ -190,7 +190,10 @@ public abstract class Post
 	public void setTitle( String title )
 	{
 		if ( this.title != null )
-			this.titleChanged = true;
+			if ( this.title.equals( title ) )
+				this.titleChanged = true;
+		
+		System.out.println( "[Post.setTitle] titleChanged = " + titleChanged );
 			
 		this.title = title;
 	}

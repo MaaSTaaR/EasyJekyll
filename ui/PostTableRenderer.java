@@ -5,10 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -16,7 +12,6 @@ import javax.swing.table.TableCellRenderer;
 
 import easyjekyll.Environment;
 import jekyll.Post;
-import jekyll.PublishedPost;
 
 public class PostTableRenderer implements TableCellRenderer
 {
@@ -43,7 +38,7 @@ public class PostTableRenderer implements TableCellRenderer
 		
 		JLabel title = new JLabel( currPost.getTitle() );
 		
-		title.setFont( new Font( Environment.getInstance().getFonts().getPoiretOne().getName(), Font.PLAIN, 35 ) );
+		title.setFont( new Font( Environment.getInstance().getFonts().getPoiretOne().getName(), Font.PLAIN, 30 ) );
 		
 		cellPane.add( title, BorderLayout.PAGE_START );
 		

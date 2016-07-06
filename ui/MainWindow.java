@@ -1,29 +1,17 @@
 // [MQH] 11 June 2016
 package ui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import jekyll.Blog;
-import jekyll.Post;
-import jekyll.PublishedPost;
-import easyjekyll.Environment;
 
 public class MainWindow
 {
@@ -61,7 +49,6 @@ public class MainWindow
 		
 		this.mainWin = new JFrame( "EasyJekyll" );
 		
-		//this.mainWin.setSize( 600, 600 );
 		this.mainWin.setExtendedState( JFrame.MAXIMIZED_BOTH );
 		this.mainWin.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		this.mainWin.setContentPane( mainPane );
@@ -147,40 +134,6 @@ public class MainWindow
 	
 	private void createPostSpace()
 	{
-		/*
-		Blog blog = Environment.getInstance().getBlog();
-		
-		// ... //
-		
-		JPanel postPane = new JPanel();
-		
-		postPane.setLayout( new BorderLayout() );
-		
-		// ... //
-		
-		ArrayList<Post> postsSource = blog.getPosts( Blog.ContentType.PUBLISHED );
-		
-		final JTable postsTable = new JTable( new PostTableModel( postsSource ) );
-		
-		postsTable.setRowHeight( 80 );
-		postsTable.setDefaultRenderer( Object.class, new PostTableRenderer() );
-		
-		postsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener()
-		{
-			@Override
-			public void valueChanged( ListSelectionEvent e )
-			{
-				if ( !e.getValueIsAdjusting() )
-					new Editor( ( Post ) postsTable.getValueAt( postsTable.getSelectedRow(), 0 ) );
-			}	
-		});
-		
-		JScrollPane scrolledTable = new JScrollPane( postsTable );
-		
-		postPane.add( scrolledTable, BorderLayout.CENTER );
-		*/
-		// ... //
-		
 		JPanel postPane = new PostListViewer( Blog.ContentType.PUBLISHED );
 		
 		this.workspacePane.add( postPane, this.postSpaceName );

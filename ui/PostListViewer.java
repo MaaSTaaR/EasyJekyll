@@ -16,6 +16,8 @@ import easyjekyll.Environment;
 
 public class PostListViewer extends JPanel
 {
+	private static final long serialVersionUID = 38460541805670656L;
+
 	public PostListViewer( Blog.ContentType contentType )
 	{
 		Blog blog = Environment.getInstance().getBlog();
@@ -31,7 +33,7 @@ public class PostListViewer extends JPanel
 		final JTable postsTable = new JTable( new PostTableModel( postsSource ) );
 		
 		postsTable.setRowHeight( 80 );
-		postsTable.setDefaultRenderer( Object.class, new PostTableRenderer() );
+		postsTable.setDefaultRenderer( Object.class, PostTableRendererFactory.getRenderer( contentType ) );
 		
 		postsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener()
 		{

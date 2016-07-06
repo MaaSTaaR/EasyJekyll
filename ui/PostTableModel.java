@@ -9,6 +9,7 @@ import jekyll.Post;
 
 public class PostTableModel extends AbstractTableModel
 {
+	private static final long serialVersionUID = 3999355160323444062L;
 	private ArrayList<Post> source;
 	
 	public PostTableModel( ArrayList<Post> source )
