@@ -17,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import jekyll.Blog;
 import jekyll.Post;
@@ -59,7 +61,8 @@ public class MainWindow
 		
 		this.mainWin = new JFrame( "EasyJekyll" );
 		
-		this.mainWin.setSize( 600, 600 );
+		//this.mainWin.setSize( 600, 600 );
+		this.mainWin.setExtendedState( JFrame.MAXIMIZED_BOTH );
 		this.mainWin.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		this.mainWin.setContentPane( mainPane );
 		
@@ -156,9 +159,20 @@ public class MainWindow
 		
 		ArrayList<Post> postsSource = blog.getPosts( Blog.ContentType.PUBLISHED );
 		
-		JTable postsTable = new JTable( new PostTableModel( postsSource ) );
+		final JTable postsTable = new JTable( new PostTableModel( postsSource ) );
 		
+		postsTable.setRowHeight( 70 );
 		postsTable.setDefaultRenderer( Object.class, new PostTableRenderer() );
+		
+		postsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged( ListSelectionEvent e )
+			{
+				if ( !e.getValueIsAdjusting() )
+					new Editor( ( Post ) postsTable.getValueAt( postsTable.getSelectedRow(), 0 ) );
+			}	
+		});
 		
 		JScrollPane scrolledTable = new JScrollPane( postsTable );
 		

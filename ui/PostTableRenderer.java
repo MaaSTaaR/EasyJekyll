@@ -4,6 +4,9 @@ package ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,15 +19,22 @@ import jekyll.PublishedPost;
 
 public class PostTableRenderer implements TableCellRenderer
 {
+	private final Color selectionColor = new Color( 255, 238, 230 );
+	
 	public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column )
 	{
-		Post currPost = (Post) value;
+		Color backgroundColor = Color.WHITE;
+		
+		final Post currPost = (Post) value;
 		
 		// ... //
 		
 		JPanel cellPane = new JPanel();
 		
-		cellPane.setBackground( Color.WHITE );
+		if ( hasFocus )
+			backgroundColor = this.selectionColor;
+		
+		cellPane.setBackground( backgroundColor );
 		
 		JLabel title = new JLabel( currPost.getTitle() );
 		JLabel date = new JLabel( ( ( PublishedPost ) currPost ).getPostDate() );
@@ -36,7 +46,10 @@ public class PostTableRenderer implements TableCellRenderer
 		
 		// ... //
 		
-		table.setRowHeight(  70 );
+		//table.setRowHeight(  70 ); // Causes Infinite Recursive call! 
+		// http://stackoverflow.com/questions/12880867/gettablecellrenderercomponent-is-called-over-and-over-and-makes-100-cpu-usage
+		
+		// ... //
 		
 		return cellPane;
 	}

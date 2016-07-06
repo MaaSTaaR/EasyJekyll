@@ -81,7 +81,12 @@ public class Blog
 		
 		for ( File currPost: source.listFiles() )
 			if ( !currPost.isDirectory() )
-				posts.add( new PublishedPost( currPost, this ) );
+			{
+				if ( type == ContentType.PUBLISHED )
+					posts.add( new PublishedPost( currPost, this ) );
+				else
+					posts.add( new Draft( currPost, this ) );
+			}
 		
 		return posts;
 	}
