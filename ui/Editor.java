@@ -20,6 +20,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -54,9 +56,14 @@ public class Editor
 		createEditorWindow();
 	}
 	
+	private void refreshEditorTitle( boolean modified )
+	{
+		this.mainWin.setTitle( ( ( modified ) ? "(*) " : "" ) + this.currPost.getTitle() );
+	}
+	
 	private void refreshEditorTitle()
 	{
-		this.mainWin.setTitle( "Editing: " + this.currPost.getTitle() );
+		this.refreshEditorTitle( false );
 	}
 	
 	private void setNativeLookAndFeel()
@@ -117,6 +124,28 @@ public class Editor
 		
 			document.insertString( 0, this.currPost.getTitle(), this.getTitleFormat() );
 			document.insertString( this.currPost.getTitle().length(), this.titleAndContentSeparator + this.currPost.getContent(), this.getContentFormat() );
+			
+			document.addDocumentListener( new DocumentListener()
+			{
+				@Override
+				public void changedUpdate( DocumentEvent ev )
+				{
+					modificationNotification();
+				}
+
+				@Override
+				public void insertUpdate( DocumentEvent ev )
+				{
+					modificationNotification();
+				}
+
+				@Override
+				public void removeUpdate( DocumentEvent ev )
+				{
+					modificationNotification();
+				}
+				
+			});
 			
 			// ... //
 			
@@ -181,5 +210,12 @@ public class Editor
 		{
 			this.statusbar.setStatusMessage( "Could not save the file!", EditorStatusbar.StatusType.ERROR );
 		}
+	}
+	
+	public void modificationNotification()
+	{
+		this.statusbar.setStatusMessage( "Modified", EditorStatusbar.StatusType.NOTE );
+		this.refreshEditorTitle( true );
+		
 	}
 }
