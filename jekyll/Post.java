@@ -100,7 +100,7 @@ public abstract class Post
 		}
 	}
 	
-	public void save()
+	public boolean save()
 	{
 		String fileContent;
 		
@@ -117,9 +117,17 @@ public abstract class Post
 		{
 			if ( this.titleChanged )
 			{
-				// TODO: The title of already exists post has been changed. The filename should be changed
+				File newFile = new File( this.getPostDir().getAbsolutePath() + "/" + this.generateFilename() );
+				
+				if ( !this.file.renameTo( newFile ) )
+					return false;
+				
+				this.titleChanged = false;
+				this.file = newFile;
 			}
 		}
+		
+		System.out.println( this.file.getName() );
 		
 		String frontMatter = "---\n" + this.generateGeneralFrontMatter() + this.generateFrontMatter() + "---\n";
 		
@@ -131,6 +139,8 @@ public abstract class Post
 			writer.write( fileContent );
 			writer.close();
 		} catch ( IOException e ) { e.printStackTrace(); }
+		
+		return true;
 	}
 	
 	private String generateGeneralFrontMatter()
@@ -190,11 +200,13 @@ public abstract class Post
 	public void setTitle( String title )
 	{
 		if ( this.title != null )
-			if ( this.title.equals( title ) )
+			if ( !this.title.equals( title ) )
 				this.titleChanged = true;
 		
-		System.out.println( "[Post.setTitle] titleChanged = " + titleChanged );
-			
+		System.out.println( "title = " + title );
+		System.out.println( "this.title = " + this.title );
+		System.out.println( "this.titleChanged = " + this.titleChanged );
+		
 		this.title = title;
 	}
 	

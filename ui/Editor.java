@@ -152,4 +152,16 @@ public class Editor
 	{
 		return this.getText().split( this.titleAndContentSeparator, 2 )[ 1 ];
 	}
+	
+	public void saveNotification( boolean succeed )
+	{
+		if ( succeed )
+		{
+			this.mainWin.setTitle( "Editing " + this.currPost.getTitle() );
+		}
+		else
+		{
+			// God, Help us!
+		}
+	}
 }

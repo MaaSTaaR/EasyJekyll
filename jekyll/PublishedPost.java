@@ -55,10 +55,11 @@ public class PublishedPost extends Post
 	}
 	
 	@Override
-	public void save()
+	public boolean save()
 	{
 		this.postDir = this.blog.getPostsDir();
-		super.save();
+		
+		return super.save();
 	}
 	
 	@Override
@@ -81,7 +82,7 @@ public class PublishedPost extends Post
 	@Override
 	protected String generateFrontMatter()
 	{
-		String postFrontMatter = "date: " + this.getPostDate() + "\n";
+		String postFrontMatter = "date: " + this.getPostDateAsString() + "\n";
 		
 		return postFrontMatter;
 	}

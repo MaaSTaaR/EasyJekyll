@@ -20,11 +20,11 @@ public class Draft extends Post
 	}
 	
 	@Override
-	public void save()
+	public boolean save()
 	{
 		this.postDir = this.blog.getDraftsDir();
 		
-		super.save();
+		return super.save();
 	}
 	
 	@Override

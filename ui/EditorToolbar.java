@@ -51,7 +51,7 @@ public class EditorToolbar extends JPanel
 				currPost.setTitle( editor.getTitle() );
 				currPost.setContent( editor.getContent() );
 				
-				currPost.save();
+				editor.saveNotification( currPost.save() );
 			}	
 		});
 		
