@@ -147,6 +147,7 @@ public class MainWindow
 	
 	private void createPostSpace()
 	{
+		/*
 		Blog blog = Environment.getInstance().getBlog();
 		
 		// ... //
@@ -161,7 +162,7 @@ public class MainWindow
 		
 		final JTable postsTable = new JTable( new PostTableModel( postsSource ) );
 		
-		postsTable.setRowHeight( 70 );
+		postsTable.setRowHeight( 80 );
 		postsTable.setDefaultRenderer( Object.class, new PostTableRenderer() );
 		
 		postsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener()
@@ -177,20 +178,18 @@ public class MainWindow
 		JScrollPane scrolledTable = new JScrollPane( postsTable );
 		
 		postPane.add( scrolledTable, BorderLayout.CENTER );
-		
+		*/
 		// ... //
+		
+		JPanel postPane = new PostListViewer( Blog.ContentType.PUBLISHED );
 		
 		this.workspacePane.add( postPane, this.postSpaceName );
 	}
 	
 	private void createDraftSpace()
 	{
-		JPanel draftPane = new JPanel();
-		
-		JLabel helloWorld = new JLabel( "Hello Drafts World!" );
-		
-		draftPane.add( helloWorld );
-		
+		JPanel draftPane = new PostListViewer( Blog.ContentType.DRAFT );
+				
 		this.workspacePane.add( draftPane, this.draftSpaceName );
 	}
 }

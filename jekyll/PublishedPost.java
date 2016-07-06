@@ -3,6 +3,7 @@ package jekyll;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,9 +39,19 @@ public class PublishedPost extends Post
 		return this.date.split( " " )[ 1 ];
 	}
 	
-	public String getPostDate()
+	public String getPostDateAsString()
 	{
 		return this.date;
+	}
+	
+	public Date getPostDate()
+	{
+		try
+		{
+			return postDateFormat.parse( this.date );
+		} catch ( ParseException e ) { e.printStackTrace(); }
+		
+		return null;
 	}
 	
 	@Override
@@ -56,7 +67,7 @@ public class PublishedPost extends Post
 		String loadedDate = this.frontMatter.get( "date" );
 		
 		if ( loadedDate == null )
-			this.date = this.postDateFormat.format( new Date() );
+			this.date = postDateFormat.format( new Date() );
 		else
 			this.date = loadedDate;	
 	}

@@ -1,6 +1,7 @@
 // [MQH] 5 July 2016
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -23,13 +24,17 @@ public class PostTableRenderer implements TableCellRenderer
 	
 	public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column )
 	{
-		Color backgroundColor = Color.WHITE;
+		Color backgroundColor =  null;//Color.WHITE;
 		
-		final Post currPost = (Post) value;
+		Post currPost = (Post) value;
 		
 		// ... //
 		
 		JPanel cellPane = new JPanel();
+		
+		cellPane.setLayout( new BorderLayout( 25, 25 ) );
+		
+		// ... //
 		
 		if ( hasFocus )
 			backgroundColor = this.selectionColor;
@@ -37,12 +42,10 @@ public class PostTableRenderer implements TableCellRenderer
 		cellPane.setBackground( backgroundColor );
 		
 		JLabel title = new JLabel( currPost.getTitle() );
-		JLabel date = new JLabel( ( ( PublishedPost ) currPost ).getPostDate() );
 		
-		title.setFont( new Font( Environment.getInstance().getFonts().getDomineBold().getName(), Font.PLAIN, 25 ) );
-
-		cellPane.add( title );
-		cellPane.add( date );
+		title.setFont( new Font( Environment.getInstance().getFonts().getPoiretOne().getName(), Font.PLAIN, 35 ) );
+		
+		cellPane.add( title, BorderLayout.PAGE_START );
 		
 		// ... //
 		

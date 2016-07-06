@@ -3,6 +3,8 @@ package jekyll;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Blog
 {
@@ -51,7 +53,7 @@ public class Blog
 		return this.getTitles( this.draftsDir, true );
 	}*/
 	
-	public ArrayList<PublishedPost> getPostsList()
+	/*public ArrayList<PublishedPost> getPostsList()
 	{
 		ArrayList<PublishedPost> posts = new ArrayList<PublishedPost>();
 		
@@ -71,7 +73,7 @@ public class Blog
 				drafts.add( new Draft( currDraft, this ) );
 		
 		return drafts;
-	}
+	}*/
 	
 	public ArrayList<Post> getPosts( ContentType type )
 	{
@@ -87,6 +89,33 @@ public class Blog
 				else
 					posts.add( new Draft( currPost, this ) );
 			}
+		
+		// ... //
+		
+		// Sort the published post according to publish date
+		if ( type == ContentType.PUBLISHED )
+		{
+			Collections.sort( posts, new Comparator<Post>()
+			{
+				@Override
+				public int compare( Post firstItem, Post secondItem )
+				{
+					PublishedPost firstPost = (PublishedPost) firstItem;
+					PublishedPost secondPost = (PublishedPost) secondItem;
+					
+					int comparisonResult = firstPost.getPostDate().compareTo( secondPost.getPostDate() );
+					
+					if ( comparisonResult == 0 )
+						return 0;
+					else if ( comparisonResult < 0 )
+						return 1;
+					else
+						return -1;
+				}	
+			});
+		}
+		
+		// ... //
 		
 		return posts;
 	}
