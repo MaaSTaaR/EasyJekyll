@@ -2,24 +2,15 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
@@ -37,7 +28,9 @@ public class Editor
 	private JFrame mainWin;
 	private JPanel mainPane;
 	private JTextPane editor;
+	
 	private EditorStatusbar statusbar;
+	private EditorOperations operations;
 	
 	private Post currPost;
 	
@@ -51,9 +44,11 @@ public class Editor
 		this.mainWin = new JFrame();
 		this.editor = new JTextPane();
 		this.statusbar = new EditorStatusbar( this );
+		this.operations = new EditorOperations( this );
 		
-		setNativeLookAndFeel();
-		createEditorWindow();
+		this.setNativeLookAndFeel();
+		this.createEditorWindow();
+		this.setShortcuts();
 	}
 	
 	private void refreshEditorTitle( boolean modified )
@@ -76,6 +71,11 @@ public class Editor
 		catch ( InstantiationException e ) {} 
 		catch ( IllegalAccessException e ) {} 
 		catch ( UnsupportedLookAndFeelException e ) {}
+	}
+	
+	private void setShortcuts()
+	{
+		// ... //
 	}
 	
 	private void createEditorWindow()
@@ -106,7 +106,7 @@ public class Editor
 	
 	private void createToolbar()
 	{
-		this.mainPane.add( new EditorToolbar( this, this.currPost ), BorderLayout.PAGE_START );
+		this.mainPane.add( new EditorToolbar( this ), BorderLayout.PAGE_START );
 	}
 	
 	private void createStatusbar()
@@ -215,7 +215,16 @@ public class Editor
 	public void modificationNotification()
 	{
 		this.statusbar.setStatusMessage( "Modified", EditorStatusbar.StatusType.NOTE );
-		this.refreshEditorTitle( true );
-		
+		this.refreshEditorTitle( true );	
+	}
+	
+	public Post getPost()
+	{
+		return this.currPost;
+	}
+	
+	public EditorOperations getOperations()
+	{
+		return this.operations;
 	}
 }

@@ -18,12 +18,12 @@ public class EditorToolbar extends JPanel
 	private Post currPost;
 	private JToolBar toolbar;
 	
-	public EditorToolbar( Editor editor, Post currPost )
+	public EditorToolbar( Editor editor )
 	{
 		super( new BorderLayout() );
 		
 		this.editor = editor;
-		this.currPost = currPost;
+		this.currPost = this.editor.getPost();
 		
 		this.createToolbar();
 		
@@ -48,10 +48,7 @@ public class EditorToolbar extends JPanel
 			@Override
 			public void actionPerformed( ActionEvent ev )
 			{
-				currPost.setTitle( editor.getTitle() );
-				currPost.setContent( editor.getContent() );
-				
-				editor.saveNotification( currPost.save() );
+				editor.getOperations().save();
 			}	
 		});
 		
