@@ -1,13 +1,13 @@
-package ui;
+package ui.editor;
 
 import jekyll.Post;
 
-public class EditorOperations
+public class Operations
 {
 	private Editor editor;
 	private Post currPost;
 	
-	public EditorOperations( Editor editor )
+	public Operations( Editor editor )
 	{
 		this.editor = editor;
 		this.currPost = this.editor.getPost();

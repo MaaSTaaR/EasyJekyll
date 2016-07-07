@@ -1,5 +1,5 @@
 // [MQH] 6 July 2016
-package ui;
+package ui.posttable;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ui.editor.Editor;
 import jekyll.Blog;
 import jekyll.Post;
 import easyjekyll.Environment;

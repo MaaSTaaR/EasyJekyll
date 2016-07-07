@@ -1,5 +1,5 @@
 // [MQH] 5 July 2016
-package ui;
+package ui.posttable;
 
 import java.util.ArrayList;
 

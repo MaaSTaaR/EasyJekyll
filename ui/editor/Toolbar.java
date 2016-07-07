@@ -1,5 +1,5 @@
 // [MQH] 6 July 2016
-package ui;
+package ui.editor;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -11,14 +11,14 @@ import javax.swing.JToolBar;
 
 import jekyll.Post;
 
-public class EditorToolbar extends JPanel
+public class Toolbar extends JPanel
 {
 	private static final long serialVersionUID = 7626941592528068304L;
 	private Editor editor;
 	private Post currPost;
 	private JToolBar toolbar;
 	
-	public EditorToolbar( Editor editor )
+	public Toolbar( Editor editor )
 	{
 		super( new BorderLayout() );
 		

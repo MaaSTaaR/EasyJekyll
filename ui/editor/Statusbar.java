@@ -1,5 +1,5 @@
 // [MQH] 7 July 2016
-package ui;
+package ui.editor;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,7 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class EditorStatusbar extends JPanel
+public class Statusbar extends JPanel
 {
 	private static final long serialVersionUID = 6578027820467604480L;
 	private JLabel statusLabel;
@@ -31,7 +31,7 @@ public class EditorStatusbar extends JPanel
 		}
 	};
 	
-	public EditorStatusbar( Editor editor )
+	public Statusbar( Editor editor )
 	{
 		this.editor = editor;
 		

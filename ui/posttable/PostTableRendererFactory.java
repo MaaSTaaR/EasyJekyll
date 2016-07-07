@@ -1,5 +1,5 @@
 // [MQH] 6 July 2016
-package ui;
+package ui.posttable;
 
 import jekyll.Blog.ContentType;
 

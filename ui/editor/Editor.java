@@ -1,15 +1,10 @@
-package ui;
+package ui.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Event;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,8 +30,8 @@ public class Editor
 	private JPanel mainPane;
 	private JTextPane editor;
 	
-	private EditorStatusbar statusbar;
-	private EditorOperations operations;
+	private Statusbar statusbar;
+	private Operations operations;
 	
 	private Post currPost;
 	
@@ -49,8 +44,8 @@ public class Editor
 		
 		this.mainWin = new JFrame();
 		this.editor = new JTextPane();
-		this.statusbar = new EditorStatusbar( this );
-		this.operations = new EditorOperations( this );
+		this.statusbar = new Statusbar( this );
+		this.operations = new Operations( this );
 		
 		this.setNativeLookAndFeel();
 		this.createEditorWindow();
@@ -122,7 +117,7 @@ public class Editor
 	
 	private void createToolbar()
 	{
-		this.mainPane.add( new EditorToolbar( this ), BorderLayout.PAGE_START );
+		this.mainPane.add( new Toolbar( this ), BorderLayout.PAGE_START );
 	}
 	
 	private void createStatusbar()
@@ -220,17 +215,17 @@ public class Editor
 		if ( succeed )
 		{
 			this.refreshEditorTitle();
-			this.statusbar.setStatusMessage( "Saved", EditorStatusbar.StatusType.SUCCESS );
+			this.statusbar.setStatusMessage( "Saved", Statusbar.StatusType.SUCCESS );
 		}
 		else
 		{
-			this.statusbar.setStatusMessage( "Could not save the file!", EditorStatusbar.StatusType.ERROR );
+			this.statusbar.setStatusMessage( "Could not save the file!", Statusbar.StatusType.ERROR );
 		}
 	}
 	
 	public void modificationNotification()
 	{
-		this.statusbar.setStatusMessage( "Modified", EditorStatusbar.StatusType.NOTE );
+		this.statusbar.setStatusMessage( "Modified", Statusbar.StatusType.NOTE );
 		this.refreshEditorTitle( true );	
 	}
 	
@@ -239,7 +234,7 @@ public class Editor
 		return this.currPost;
 	}
 	
-	public EditorOperations getOperations()
+	public Operations getOperations()
 	{
 		return this.operations;
 	}
