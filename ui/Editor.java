@@ -2,13 +2,19 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Event;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
@@ -75,7 +81,17 @@ public class Editor
 	
 	private void setShortcuts()
 	{
-		// ... //
+		this.editor.getInputMap().put( KeyStroke.getKeyStroke( "ctrl S" ), "enterPressed" );
+		this.editor.getActionMap().put( "enterPressed", new AbstractAction() 
+		{
+			private static final long serialVersionUID = 5039415689079797737L;
+
+			@Override
+			public void actionPerformed( ActionEvent arg0 )
+			{
+				getOperations().save();
+			}
+		});
 	}
 	
 	private void createEditorWindow()

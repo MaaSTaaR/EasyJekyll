@@ -127,8 +127,6 @@ public abstract class Post
 			}
 		}
 		
-		System.out.println( this.file.getName() );
-		
 		String frontMatter = "---\n" + this.generateGeneralFrontMatter() + this.generateFrontMatter() + "---\n";
 		
 		fileContent = frontMatter + this.getContent();
@@ -202,10 +200,6 @@ public abstract class Post
 		if ( this.title != null )
 			if ( !this.title.equals( title ) )
 				this.titleChanged = true;
-		
-		System.out.println( "title = " + title );
-		System.out.println( "this.title = " + this.title );
-		System.out.println( "this.titleChanged = " + this.titleChanged );
 		
 		this.title = title;
 	}

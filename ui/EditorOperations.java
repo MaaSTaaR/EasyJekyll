@@ -15,9 +15,9 @@ public class EditorOperations
 	
 	public void save()
 	{
-		this.currPost.setTitle( editor.getTitle() );
-		this.currPost.setContent( editor.getContent() );
+		this.currPost.setTitle( this.editor.getTitle() );
+		this.currPost.setContent( this.editor.getContent() );
 		
-		this.editor.saveNotification( currPost.save() );
+		this.editor.saveNotification( this.currPost.save() );
 	}
 }
