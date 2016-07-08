@@ -120,9 +120,7 @@ public class MainWindow
 		
 		// ... //
 		
-		this.workspacePane = new JPanel();
-		
-		this.workspacePane.setLayout( workspaceLayout );
+		this.workspacePane = new JPanel( workspaceLayout );
 		
 		// ... //
 		

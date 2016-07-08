@@ -3,9 +3,12 @@ package ui.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -38,6 +41,8 @@ public class Editor
 	private final Color titleColor = new Color( 0, 85, 128 );
 	private final String titleAndContentSeparator = "\n\n";
 	
+	private boolean documentModified = false;
+	
 	public Editor( Post currPost )
 	{
 		this.currPost = currPost;
@@ -52,16 +57,11 @@ public class Editor
 		this.setShortcuts();
 	}
 	
-	private void refreshEditorTitle( boolean modified )
-	{
-		this.mainWin.setTitle( ( ( modified ) ? "(*) " : "" ) + this.currPost.getTitle() );
-	}
-	
 	private void refreshEditorTitle()
 	{
-		this.refreshEditorTitle( false );
+		this.mainWin.setTitle( ( ( this.documentModified ) ? "(*) " : "" ) + this.currPost.getTitle() );
 	}
-	
+		
 	private void setNativeLookAndFeel()
 	{
 		try 
@@ -97,6 +97,39 @@ public class Editor
 		
 		this.mainWin.setExtendedState( JFrame.MAXIMIZED_BOTH );
 		this.mainWin.setContentPane( mainPane );
+		
+		this.mainWin.addWindowListener( new WindowListener() 
+		{
+			@Override
+			public void windowClosing( WindowEvent e )
+			{
+				if ( documentModified )
+				{
+					int response = JOptionPane.showConfirmDialog( null, "Do you want to save?", "Saving", JOptionPane.YES_NO_OPTION );
+					
+					if ( response == JOptionPane.YES_OPTION )
+						getOperations().save();
+				}
+			}
+			
+			@Override
+			public void windowActivated( WindowEvent e ) { }
+
+			@Override
+			public void windowClosed( WindowEvent e ) { }
+
+			@Override
+			public void windowDeactivated( WindowEvent e ) { }
+
+			@Override
+			public void windowDeiconified( WindowEvent e ) { }
+
+			@Override
+			public void windowIconified( WindowEvent e ) { }
+
+			@Override
+			public void windowOpened( WindowEvent e ) { }
+		});
 		
 		// ... //
 		
@@ -214,6 +247,8 @@ public class Editor
 	{
 		if ( succeed )
 		{
+			this.documentModified = false;
+			
 			this.refreshEditorTitle();
 			this.statusbar.setStatusMessage( "Saved", Statusbar.StatusType.SUCCESS );
 		}
@@ -225,8 +260,10 @@ public class Editor
 	
 	public void modificationNotification()
 	{
+		this.documentModified = true;
+		
 		this.statusbar.setStatusMessage( "Modified", Statusbar.StatusType.NOTE );
-		this.refreshEditorTitle( true );	
+		this.refreshEditorTitle();
 	}
 	
 	public Post getPost()
