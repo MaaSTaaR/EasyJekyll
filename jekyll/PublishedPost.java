@@ -23,6 +23,18 @@ public class PublishedPost extends Post
 		
 		this.date = postDateFormat.format( new Date() );
 	}
+	
+	// Make a copy of a draft as a published post.
+	public PublishedPost( Draft draft, Blog blog )
+	{
+		super( draft.getTitle(), blog );
+		
+		this.date = postDateFormat.format( new Date() );
+		
+		this.setContent( draft.getContent() );
+		this.setTags( draft.getTags() );
+		this.setCategories( draft.getCategories() );
+	}
 
 	public static String parseTitleFromFilename( String filename )
 	{
@@ -85,5 +97,11 @@ public class PublishedPost extends Post
 		String postFrontMatter = "date: " + this.getPostDateAsString() + "\n";
 		
 		return postFrontMatter;
+	}
+
+	@Override
+	public PostType getType()
+	{
+		return PostType.PUBLISHED;
 	}
 }

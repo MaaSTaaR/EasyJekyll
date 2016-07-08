@@ -14,6 +14,16 @@ public class Draft extends Post
 		super( title, blog );
 	}
 	
+	public boolean publish()
+	{
+		PublishedPost post = new PublishedPost( this, this.blog );
+		
+		if ( post.save() )
+			return this.delete();
+		
+		return false;
+	}
+	
 	public static String parseTitleFromFilename( String filename )
 	{
 		return Post.parseTitleFromFilename( filename, false );
@@ -42,5 +52,11 @@ public class Draft extends Post
 	protected String generateFrontMatter()
 	{
 		return "";
+	}
+
+	@Override
+	public PostType getType()
+	{
+		return PostType.DRAFT;
 	}
 }

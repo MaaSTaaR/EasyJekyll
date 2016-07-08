@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import jekyll.Post;
+import jekyll.Post.PostType;
 
 public class Toolbar extends JPanel
 {
@@ -37,6 +38,9 @@ public class Toolbar extends JPanel
 		this.toolbar.setFloatable( false );
 		
 		this.createSaveButton();
+		
+		if ( this.currPost.getType() == PostType.DRAFT )
+			this.createPublishButton();
 	}
 	
 	private void createSaveButton()
@@ -52,6 +56,22 @@ public class Toolbar extends JPanel
 			}	
 		});
 		
-		toolbar.add( saveBtn );
+		this.toolbar.add( saveBtn );
+	}
+	
+	private void createPublishButton()
+	{
+		JButton publishBtn = new JButton( "Publish" );
+		
+		publishBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				editor.getOperations().publish();
+			}	
+		});
+		
+		this.toolbar.add( publishBtn );
 	}
 }

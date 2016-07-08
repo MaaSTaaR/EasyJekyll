@@ -14,15 +14,19 @@ import java.util.Iterator;
 public abstract class Post
 {
 	private File file;
+	
 	private String title = null;
 	private String content;
 	private ArrayList<String> categories;
 	private ArrayList<String> tags;
+	
 	private boolean newPost;
 	protected Blog blog;
 	protected File postDir;
 	protected HashMap<String, String> frontMatter;
 	private boolean titleChanged = false;
+	
+	public enum PostType { PUBLISHED, DRAFT };
 	
 	private Post( Blog blog )
 	{
@@ -244,6 +248,16 @@ public abstract class Post
 		return this.frontMatter;
 	}
 	
+	protected void setTags( ArrayList<String> tags )
+	{
+		this.tags = tags;
+	}
+	
+	protected void setCategories( ArrayList<String> categories )
+	{
+		this.categories = categories;
+	}
+	
 	public static String parseTitleFromFilename( String filename, boolean withDate )
 	{
 		String title = "";
@@ -277,6 +291,17 @@ public abstract class Post
 		return filename.toLowerCase();
 	}
 	
+	public boolean isNewlyCreated()
+	{
+		return this.newPost;
+	}
+	
+	public boolean delete()
+	{
+		return this.file.delete();
+	}
+	
+	abstract public PostType getType();
 	abstract protected void parseFrontMatter();
 	abstract protected String generateFrontMatter();
 	abstract protected String generateFilename();

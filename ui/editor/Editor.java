@@ -24,6 +24,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import ui.posttable.PostListViewer;
 import easyjekyll.Environment;
 import jekyll.Post;
 
@@ -251,6 +252,10 @@ public class Editor
 			
 			this.refreshEditorTitle();
 			this.statusbar.setStatusMessage( "Saved", Statusbar.StatusType.SUCCESS );
+			
+			// Not Yet!
+			//if ( this.currPost.isNewlyCreated() )
+			//	this.postListViewer.refreshTables();
 		}
 		else
 		{
@@ -264,6 +269,16 @@ public class Editor
 		
 		this.statusbar.setStatusMessage( "Modified", Statusbar.StatusType.NOTE );
 		this.refreshEditorTitle();
+	}
+	
+	public void publishNotification( boolean succeed )
+	{
+		if ( succeed )
+		{
+			JOptionPane.showMessageDialog( null, "The draft has been published. This window will be closed now" );
+			
+			this.mainWin.dispose();
+		}
 	}
 	
 	public Post getPost()
