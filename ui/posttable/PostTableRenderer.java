@@ -19,15 +19,13 @@ public class PostTableRenderer implements TableCellRenderer
 	
 	public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column )
 	{
-		Color backgroundColor =  null;//Color.WHITE;
+		Color backgroundColor =  null;
 		
 		Post currPost = (Post) value;
 		
 		// ... //
 		
-		JPanel cellPane = new JPanel();
-		
-		cellPane.setLayout( new BorderLayout( 25, 25 ) );
+		JPanel cellPane = new JPanel( new BorderLayout( 25, 25 ) );
 		
 		// ... //
 		

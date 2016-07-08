@@ -2,6 +2,9 @@
 package ui.posttable;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -35,15 +38,15 @@ public class PostListViewer extends JPanel
 		
 		postsTable.setRowHeight( 80 );
 		postsTable.setDefaultRenderer( Object.class, PostTableRendererFactory.getRenderer( contentType ) );
+		postsTable.setTableHeader( null );
 		
-		postsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener()
+		postsTable.addMouseListener( new MouseAdapter() 
 		{
-			@Override
-			public void valueChanged( ListSelectionEvent e )
+			public void mouseClicked( MouseEvent e )
 			{
-				if ( !e.getValueIsAdjusting() )
+				if ( e.getClickCount() == 2 )
 					new Editor( ( Post ) postsTable.getValueAt( postsTable.getSelectedRow(), 0 ) );
-			}	
+			}
 		});
 		
 		JScrollPane scrolledTable = new JScrollPane( postsTable );
