@@ -1,5 +1,7 @@
 package easyjekyll;
 
+import java.util.prefs.Preferences;
+
 import ui.Fonts;
 import jekyll.Blog;
 
@@ -8,11 +10,13 @@ public class Environment
 	private static Environment instance = null;
 	private Blog currBlog;
 	private Fonts fonts;
+	private Preferences prefs;
 	
 	private Environment()
 	{
 		this.currBlog = new Blog( "/home/maastaar/jekyll/mqh_EasyJekyll_Test" );
 		this.fonts = new Fonts();
+		this.prefs = Preferences.userRoot().node( "net.maastaar.easyjekyll" );
 	}
 	
 	public static Environment getInstance()
@@ -31,5 +35,10 @@ public class Environment
 	public Fonts getFonts()
 	{
 		return this.fonts;
+	}
+	
+	public Preferences getPreferences()
+	{
+		return this.prefs;
 	}
 }

@@ -4,7 +4,6 @@ package ui.posttable;
 import java.awt.BorderLayout;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;

@@ -24,7 +24,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-import ui.posttable.PostListViewer;
 import easyjekyll.Environment;
 import jekyll.Post;
 

@@ -2,23 +2,16 @@
 package ui;
 
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.BevelBorder;
 
-import easyjekyll.Environment;
 import ui.posttable.PostListViewer;
 import jekyll.Blog;
 
@@ -125,8 +118,13 @@ public class MainWindow
 		
 		JPanel optionsPane = new JPanel();
 		
-		//optionsPane.setLayout( new BoxLayout( optionsPane, BoxLayout.X_AXIS ) );
 		optionsPane.setBorder( BorderFactory.createEmptyBorder( 10, 0, 10, 0 ) );
+		
+		// ... //
+		
+		ActionButton runBtn = new ActionButton( "Run Locally" );
+		
+		optionsPane.add( runBtn );
 		
 		// ... //
 		
