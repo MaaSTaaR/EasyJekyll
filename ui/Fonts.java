@@ -10,12 +10,15 @@ import java.io.IOException;
 
 public class Fonts
 {
+	// TODO: There is something called hash-table! :-/
 	private Font domineFont;
 	private Font alexBrushFont;
 	private Font cookieFont;
 	private Font fredokaOneFont;
 	private Font poiretOneFont;
 	private Font shareFont;
+	private Font badScriptFont;
+	private Font robotoFont;
 	
 	public Fonts()
 	{
@@ -27,6 +30,8 @@ public class Fonts
 			this.fredokaOneFont = Font.createFont( Font.TRUETYPE_FONT, new File( "assets/fonts/Fredoka_One/FredokaOne-Regular.ttf" ) );
 			this.poiretOneFont = Font.createFont( Font.TRUETYPE_FONT, new File( "assets/fonts/Poiret_One/PoiretOne-Regular.ttf" ) );
 			this.shareFont = Font.createFont( Font.TRUETYPE_FONT, new File( "assets/fonts/Share/Share-Regular.ttf" ) );
+			this.badScriptFont = Font.createFont( Font.TRUETYPE_FONT, new File( "assets/fonts/Bad_Script/BadScript-Regular.ttf" ) );
+			this.robotoFont = Font.createFont( Font.TRUETYPE_FONT, new File( "assets/fonts/Roboto/Roboto-Regular.ttf" ) );
 			
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( domineFont );
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( alexBrushFont );
@@ -34,6 +39,8 @@ public class Fonts
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( fredokaOneFont );
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( poiretOneFont );
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( shareFont );
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( badScriptFont );
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( robotoFont );
 		}
 		catch ( FontFormatException e )
 		{
@@ -73,5 +80,15 @@ public class Fonts
 	public Font getShare()
 	{
 		return this.shareFont;
+	}
+	
+	public Font getBadScript()
+	{
+		return this.badScriptFont;
+	}
+	
+	public Font getRoboto()
+	{
+		return this.robotoFont;
 	}
 }

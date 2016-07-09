@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import ui.ActionButton;
 import jekyll.Post;
 import jekyll.Post.PostType;
 
@@ -45,7 +46,7 @@ public class Toolbar extends JPanel
 	
 	private void createSaveButton()
 	{
-		JButton saveBtn = new JButton( "Save" );
+		ActionButton saveBtn = new ActionButton( "Save" );
 		
 		saveBtn.addActionListener( new ActionListener() 
 		{
@@ -61,7 +62,7 @@ public class Toolbar extends JPanel
 	
 	private void createPublishButton()
 	{
-		JButton publishBtn = new JButton( "Publish" );
+		ActionButton publishBtn = new ActionButton( "Publish" );
 		
 		publishBtn.addActionListener( new ActionListener() 
 		{

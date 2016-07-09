@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -26,6 +28,8 @@ public class PostTableRenderer implements TableCellRenderer
 		// ... //
 		
 		JPanel cellPane = new JPanel( new BorderLayout( 25, 25 ) );
+		
+		cellPane.setBorder( BorderFactory.createEmptyBorder( 15, 10, 5, 15 ) );
 		
 		// ... //
 		

@@ -2,16 +2,23 @@
 package ui;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.BevelBorder;
 
+import easyjekyll.Environment;
 import ui.posttable.PostListViewer;
 import jekyll.Blog;
 
@@ -35,9 +42,9 @@ public class MainWindow
 		{
 			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 		}
-		catch ( ClassNotFoundException e ) {} 
-		catch ( InstantiationException e ) {} 
-		catch ( IllegalAccessException e ) {} 
+		catch ( ClassNotFoundException e ) {}
+		catch ( InstantiationException e ) {}
+		catch ( IllegalAccessException e ) {}
 		catch ( UnsupportedLookAndFeelException e ) {}
 	}
 	
@@ -45,7 +52,7 @@ public class MainWindow
 	{
 		this.mainPane = new JPanel();
 		
-		this.mainPane.setLayout( new BoxLayout( mainPane, BoxLayout.PAGE_AXIS ) );
+		this.mainPane.setLayout( new BoxLayout( mainPane, BoxLayout.Y_AXIS ) );
 		
 		// ... //
 		
@@ -66,17 +73,18 @@ public class MainWindow
 	
 	private void createWidgets()
 	{
-		this.createMainButtons();
+		this.createNavigationPane();
 		this.createWorkspace();
+		this.createOptionsPane();
 	}
 	
-	private void createMainButtons()
+	private void createNavigationPane()
 	{
-		JPanel mainButtonsPane = new JPanel();
+		JPanel navPane = new JPanel();
 		
 		// ... //
 		
-		JButton postsBtn = new JButton( "Posts" );
+		NavigationButton postsBtn = new NavigationButton( "Posts" );
 		
 		postsBtn.addActionListener( new ActionListener()
 		{
@@ -87,12 +95,12 @@ public class MainWindow
 			}
 			
 		});
-		
-		mainButtonsPane.add( postsBtn );
+				
+		navPane.add( postsBtn );
 		
 		// ... //
 		
-		JButton draftsBtn = new JButton( "Drafts" );
+		NavigationButton draftsBtn = new NavigationButton( "Drafts" );
 		
 		draftsBtn.addActionListener( new ActionListener()
 		{
@@ -104,11 +112,46 @@ public class MainWindow
 			
 		});
 		
-		mainButtonsPane.add( draftsBtn );
+		navPane.add( draftsBtn );
 		
 		// ... //
 		
-		this.mainPane.add( mainButtonsPane );
+		this.mainPane.add( navPane );
+	}
+	
+	private void createOptionsPane()
+	{
+		// ... //
+		
+		JPanel optionsPane = new JPanel();
+		
+		//optionsPane.setLayout( new BoxLayout( optionsPane, BoxLayout.X_AXIS ) );
+		optionsPane.setBorder( BorderFactory.createEmptyBorder( 10, 0, 10, 0 ) );
+		
+		// ... //
+		
+		ActionButton deployBtn = new ActionButton( "Deploy" );
+		
+		optionsPane.add( deployBtn );
+		
+		// ... //
+		
+		ActionButton settingBtn = new ActionButton( "Deployment Settings" );
+		
+		settingBtn.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new SettingWindow();
+			}	
+		});
+		
+		optionsPane.add( settingBtn );
+		
+		// ... //
+		
+		this.mainPane.add( optionsPane );
 	}
 	
 	private void createWorkspace()

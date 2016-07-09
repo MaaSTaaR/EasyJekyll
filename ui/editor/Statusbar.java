@@ -4,9 +4,12 @@ package ui.editor;
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import easyjekyll.Environment;
 
 public class Statusbar extends JPanel
 {
@@ -36,12 +39,11 @@ public class Statusbar extends JPanel
 		this.editor = editor;
 		
 		this.setLayout( new BoxLayout( this, BoxLayout.LINE_AXIS ) );
+		this.setBorder( BorderFactory.createEmptyBorder( 5, 10, 5, 10 ) );
 		
 		this.statusLabel = new JLabel( "Ready" );
 		
-		Font currFont = this.statusLabel.getFont();
-		
-		this.statusLabel.setFont( new Font( currFont.getName(), currFont.getStyle(), 17 ) );
+		this.statusLabel.setFont( new Font( Environment.getInstance().getFonts().getRoboto().getName(), Font.PLAIN, 15 ) );
 		
 		this.add( this.statusLabel );
 	}

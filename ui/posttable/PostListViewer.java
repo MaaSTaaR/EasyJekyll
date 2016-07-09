@@ -2,21 +2,20 @@
 package ui.posttable;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
+import ui.ActionButton;
 import ui.editor.Editor;
 import jekyll.Blog;
 import jekyll.Blog.ContentType;
@@ -56,7 +55,7 @@ public class PostListViewer extends JPanel
 		
 		// ... //
 		
-		JButton newDraftBtn = new JButton( "New Draft" );
+		ActionButton newDraftBtn = new ActionButton( "New Draft" );
 		
 		newDraftBtn.addActionListener( new ActionListener() 
 		{
@@ -75,7 +74,7 @@ public class PostListViewer extends JPanel
 		
 		// ... //
 		
-		JButton refreshBtn = new JButton( "Refresh" );
+		ActionButton refreshBtn = new ActionButton( "Refresh" );
 		
 		refreshBtn.addActionListener( new ActionListener() 
 		{
@@ -99,7 +98,7 @@ public class PostListViewer extends JPanel
 		
 		this.refreshTable();
 		
-		this.postsTable.setRowHeight( 80 );
+		this.postsTable.setRowHeight( 100 );
 		this.postsTable.setDefaultRenderer( Object.class, PostTableRendererFactory.getRenderer( contentType ) );
 		this.postsTable.setTableHeader( null );
 		
