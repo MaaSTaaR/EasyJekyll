@@ -6,20 +6,25 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class PublishedPost extends Post
 {
 	private String date;
-	private static DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd" ); // hh:mm:ss a" ); There is something wrong with time in Jekyll 3.0.1
+	private static DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 	
 	public PublishedPost( File file, Blog blog )
 	{
 		super( file, blog );
+		
+		this.initDate();
 	}
 	
 	public PublishedPost( String title, Blog blog )
 	{
 		super( title, blog );
+		
+		this.initDate();
 		
 		this.date = postDateFormat.format( new Date() );
 	}
@@ -29,11 +34,18 @@ public class PublishedPost extends Post
 	{
 		super( draft.getTitle(), blog );
 		
+		this.initDate();
+		
 		this.date = postDateFormat.format( new Date() );
 		
 		this.setContent( draft.getContent() );
 		this.setTags( draft.getTags() );
 		this.setCategories( draft.getCategories() );
+	}
+	
+	private void initDate()
+	{
+		postDateFormat.setTimeZone( TimeZone.getTimeZone( "GMT" ) );
 	}
 
 	public static String parseTitleFromFilename( String filename )

@@ -20,6 +20,7 @@ public class FTPDeployer
 	private String host, username, uploadDir, password;
 	private Integer port;
 	private FTPClient ftp;
+	private NotificationReciever reciever;
 	
 	public FTPDeployer( String password )
 	{
@@ -60,6 +61,8 @@ public class FTPDeployer
 		FileInputStream input = new FileInputStream( file );
 		String remotePath = this.uploadDir + remoteDir;
 		
+		this.useReciever().onUploadingFile( file.getName() );
+		
 		boolean uploaded = this.getClient().storeFile( remotePath + file.getName(), input );
 		
 		if ( !uploaded )
@@ -92,22 +95,68 @@ public class FTPDeployer
 		{
 			Blog blog = Environment.getInstance().getBlog();
 			
-			Environment.getInstance().getJekyll().stopServer();
-			Environment.getInstance().getJekyll().serve();
+			Environment.getInstance().getJekyll().build();
+			
+			this.useReciever().onConnecting();
 			
 			this.connect();
+			
+			this.useReciever().onConnected();
 			
 			this.uploadDir( blog.getSiteDir() );
 			
 			this.getClient().disconnect();
+			
+			this.useReciever().onDeploymentCompleted();
 		}
-		catch ( SocketException e ) { e.printStackTrace(); }
-		catch ( IOException e ) { e.printStackTrace(); }
-		catch ( Exception e ) { e.printStackTrace(); }
+		catch ( SocketException e ) { this.useReciever().onError( e.getMessage() ); }
+		catch ( IOException e ) { this.useReciever().onError( e.getMessage() ); }
+		catch ( Exception e ) { this.useReciever().onError( e.getMessage() ); }
 	}
 	
 	private FTPClient getClient()
 	{
 		return this.ftp;
+	}
+	
+	private NotificationReciever useReciever()
+	{
+		if ( this.reciever == null )
+		{
+			this.reciever = new NotificationReciever()
+			{
+
+				@Override
+				public void onConnecting() {}
+
+				@Override
+				public void onConnected() {}
+
+				@Override
+				public void onUploadingFile( String filename ) {}
+
+				@Override
+				public void onDeploymentCompleted() {}
+
+				@Override
+				public void onError( String errorMessage ) {}
+			};
+		}
+		
+		return this.reciever;
+	}
+	
+	public void setReciever( NotificationReciever reciever )
+	{
+		this.reciever = reciever;
+	}
+	
+	public interface NotificationReciever
+	{
+		public void onConnecting();
+		public void onConnected();
+		public void onUploadingFile( String filename );
+		public void onDeploymentCompleted();
+		public void onError( String errorMessage );
 	}
 }

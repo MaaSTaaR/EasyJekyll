@@ -41,7 +41,7 @@ public class Jekyll
 		
 		try
 		{
-			String command = this.jekyll + " serve -s " + this.blogPath;
+			String command = this.jekyll + " serve -s " + this.blogPath + " -d " + this.blogPath + "/_site";
 			
 			this.useReciever().onStartingServer();
 			
@@ -61,7 +61,6 @@ public class Jekyll
 					
 					this.useReciever().onServerReady( this.serverAddress );
 				}
-
 			}
 		} catch ( IOException e ) { e.printStackTrace(); }
 	}
@@ -74,6 +73,17 @@ public class Jekyll
 			
 			this.useReciever().onServerStopped();
 		}
+	}
+	
+	public void build()
+	{
+		try
+		{
+			String command = this.jekyll + " build -s " + this.blogPath + " -d " + this.blogPath + "/_site";
+			
+			this.runtime.exec( command );
+		}
+		catch ( IOException e ) { e.printStackTrace(); }
 	}
 	
 	private NotificationReciever useReciever()

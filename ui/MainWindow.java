@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -210,41 +212,6 @@ public class MainWindow
 		
 		// ... //
 		
-		ActionButton deployBtn = new ActionButton( "Deploy" );
-		
-		deployBtn.addActionListener( new ActionListener()
-		{
-			@Override
-			public void actionPerformed( ActionEvent e )
-			{
-				JPanel passwordPane = new JPanel();
-				JLabel passwordMessage = new JLabel( "Please enter your FTP password:" );
-				JPasswordField passwordField = new JPasswordField( 15 );
-				
-				passwordPane.add( passwordMessage );
-				passwordPane.add( passwordField );
-				
-				// ... //
-				
-				int selectedOption = JOptionPane.showOptionDialog( 	null, passwordPane, "Password", 
-																	JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
-																	new String[] { "OK", "Cancel" }, null );
-				
-				if ( selectedOption != 0 )
-					return;
-				
-				// ... //
-				
-				FTPDeployer deployer = new FTPDeployer( new String( passwordField.getPassword() ) );
-				
-				deployer.deploy();
-			}	
-		});
-		
-		optionsPane.add( deployBtn );
-		
-		// ... //
-		
 		ActionButton settingBtn = new ActionButton( "Deployment Settings" );
 		
 		settingBtn.addActionListener( new ActionListener()
@@ -257,6 +224,80 @@ public class MainWindow
 		});
 		
 		optionsPane.add( settingBtn );
+		
+		// ... //
+		
+		ActionButton deployBtn = new ActionButton( "Deploy" );
+		
+		deployBtn.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				JPanel passwordPane = new JPanel();
+				JLabel passwordMessage = new JLabel( "Please enter your FTP password:" );
+				final JPasswordField passwordField = new JPasswordField( 15 );
+				
+				passwordPane.add( passwordMessage );
+				passwordPane.add( passwordField );
+							
+				// ... //
+				
+				int selectedOption = JOptionPane.showOptionDialog( 	null, passwordPane, "Password", 
+																	JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
+																	new String[] { "OK", "Cancel" }, null );
+				
+				if ( selectedOption != 0 )
+					return;
+				
+				// ... //
+				
+				new Thread() 
+				{
+					public void run()
+					{
+						FTPDeployer deployer = new FTPDeployer( new String( passwordField.getPassword() ) );
+						
+						deployer.setReciever( new FTPDeployer.NotificationReciever()
+						{
+							@Override
+							public void onConnecting()
+							{
+								statusbar.setStatusMessage( "Connecting to FTP...", Statusbar.StatusType.NOTE );
+							}
+
+							@Override
+							public void onConnected()
+							{
+								statusbar.setStatusMessage( "Connected", Statusbar.StatusType.SUCCESS );
+							}
+
+							@Override
+							public void onUploadingFile( String filename )
+							{
+								statusbar.setStatusMessage( "Uploading " + filename, Statusbar.StatusType.NOTE );
+							}
+
+							@Override
+							public void onDeploymentCompleted()
+							{
+								statusbar.setStatusMessage( "Deployment Completed", Statusbar.StatusType.SUCCESS );
+							}
+
+							@Override
+							public void onError( String errorMessage )
+							{
+								statusbar.setStatusMessage( "Error: " + errorMessage, Statusbar.StatusType.ERROR );
+							}	
+						});
+						
+						deployer.deploy();
+					}
+				}.start();
+			}	
+		});
+		
+		optionsPane.add( deployBtn );
 		
 		// ... //
 		
