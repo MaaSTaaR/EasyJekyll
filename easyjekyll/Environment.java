@@ -4,6 +4,7 @@ import java.util.prefs.Preferences;
 
 import ui.Fonts;
 import jekyll.Blog;
+import jekyll.Jekyll;
 
 public class Environment
 {
@@ -11,12 +12,14 @@ public class Environment
 	private Blog currBlog;
 	private Fonts fonts;
 	private Preferences prefs;
+	private Jekyll jekyll;
 	
 	private Environment()
 	{
 		this.currBlog = new Blog( "/home/maastaar/jekyll/mqh_EasyJekyll_Test" );
 		this.fonts = new Fonts();
 		this.prefs = Preferences.userRoot().node( "net.maastaar.easyjekyll" );
+		this.jekyll = new Jekyll( this.prefs.get( "jekyll_command", "jekyll" ), this.currBlog.getPath() );
 	}
 	
 	public static Environment getInstance()
@@ -40,5 +43,10 @@ public class Environment
 	public Preferences getPreferences()
 	{
 		return this.prefs;
+	}
+	
+	public Jekyll getJekyll()
+	{
+		return this.jekyll;
 	}
 }

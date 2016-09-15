@@ -11,6 +11,7 @@ public class Blog
 	private File path;
 	private File postsDir;
 	private File draftsDir;
+	private File siteDir;
 	
 	public static enum ContentType { PUBLISHED, DRAFT };
 	
@@ -21,6 +22,7 @@ public class Blog
 		this.path = new File( path );
 		this.postsDir = new File( this.path.getPath() + "/_posts" );
 		this.draftsDir = new File( this.path.getPath() + "/_drafts" );
+		this.siteDir = new File( this.path.getPath() + "/_site" );
 	}
 	
 	public PublishedPost createPost( String title )
@@ -41,6 +43,16 @@ public class Blog
 	public File getDraftsDir()
 	{
 		return this.draftsDir;
+	}
+	
+	public File getSiteDir()
+	{
+		return this.siteDir;
+	}
+	
+	public String getPath()
+	{
+		return this.path.getPath();
 	}
 	
 	/*public ArrayList<String> getPostsTitles()

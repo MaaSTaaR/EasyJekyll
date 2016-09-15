@@ -1,19 +1,30 @@
 // [MQH] 11 June 2016
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import easyjekyll.Environment;
+import easyjekyll.deployer.FTPDeployer;
 import ui.posttable.PostListViewer;
 import jekyll.Blog;
+import jekyll.Jekyll.NotificationReciever;
 
 public class MainWindow
 {
@@ -22,11 +33,43 @@ public class MainWindow
 	private JPanel workspacePane;
 	private String postSpaceName = "Posts Workspace";
 	private String draftSpaceName = "Drafts Workdspace";
+	private ActionButton stopBtn;
+	private ActionButton runBtn;
+	private Statusbar statusbar;
 	
 	public MainWindow()
 	{
 		setNativeLookAndFeel();
 		createMainWindow();
+		
+		// ... //
+		
+		Environment.getInstance().getJekyll().setNotificationReciever( new NotificationReciever() 
+		{
+			@Override
+			public void onStartingServer()
+			{
+				statusbar.setStatusMessage( "Starting Server...", Statusbar.StatusType.NOTE );
+			}
+			
+			@Override
+			public void onServerReady( String serverAddress )
+			{
+				statusbar.setStatusMessage( "Server is Running on " + serverAddress, Statusbar.StatusType.SUCCESS );
+				
+				runBtn.setVisible( false );
+				stopBtn.setVisible( true );
+			}
+
+			@Override
+			public void onServerStopped()
+			{
+				statusbar.setStatusMessage( "Server Stopped.", Statusbar.StatusType.SUCCESS );
+				
+				runBtn.setVisible( true );
+				stopBtn.setVisible( false );
+			}	
+		});
 	}
 	
 	private void setNativeLookAndFeel()
@@ -69,6 +112,7 @@ public class MainWindow
 		this.createNavigationPane();
 		this.createWorkspace();
 		this.createOptionsPane();
+		this.createStatusPane();
 	}
 	
 	private void createNavigationPane()
@@ -122,13 +166,80 @@ public class MainWindow
 		
 		// ... //
 		
-		ActionButton runBtn = new ActionButton( "Run Locally" );
+		runBtn = new ActionButton( "Run Locally" );
+		
+		runBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new Thread() 
+				{
+					public void run()
+					{
+						Environment.getInstance().getJekyll().serve();
+					}
+				}.start();
+			}	
+		});
 		
 		optionsPane.add( runBtn );
 		
 		// ... //
 		
+		stopBtn = new ActionButton( "Stop Server" );
+		
+		stopBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new Thread() 
+				{
+					public void run()
+					{
+						Environment.getInstance().getJekyll().stopServer();
+					}
+				}.start();
+			}	
+		});
+		
+		stopBtn.setVisible( false );
+		
+		optionsPane.add( stopBtn );
+		
+		// ... //
+		
 		ActionButton deployBtn = new ActionButton( "Deploy" );
+		
+		deployBtn.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				JPanel passwordPane = new JPanel();
+				JLabel passwordMessage = new JLabel( "Please enter your FTP password:" );
+				JPasswordField passwordField = new JPasswordField( 15 );
+				
+				passwordPane.add( passwordMessage );
+				passwordPane.add( passwordField );
+				
+				// ... //
+				
+				int selectedOption = JOptionPane.showOptionDialog( 	null, passwordPane, "Password", 
+																	JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
+																	new String[] { "OK", "Cancel" }, null );
+				
+				if ( selectedOption != 0 )
+					return;
+				
+				// ... //
+				
+				FTPDeployer deployer = new FTPDeployer( new String( passwordField.getPassword() ) );
+				
+				deployer.deploy();
+			}	
+		});
 		
 		optionsPane.add( deployBtn );
 		
@@ -150,6 +261,17 @@ public class MainWindow
 		// ... //
 		
 		this.mainPane.add( optionsPane );
+	}
+	
+	private void createStatusPane()
+	{
+		statusbar = new Statusbar();
+		
+		statusbar.setStatusMessage( "Server is not running", Statusbar.StatusType.NORMAL );
+		
+		// ... //
+		
+		this.mainPane.add( statusbar );
 	}
 	
 	private void createWorkspace()

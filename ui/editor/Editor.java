@@ -24,6 +24,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import ui.Statusbar;
 import easyjekyll.Environment;
 import jekyll.Post;
 
@@ -49,7 +50,7 @@ public class Editor
 		
 		this.mainWin = new JFrame();
 		this.editor = new JTextPane();
-		this.statusbar = new Statusbar( this );
+		this.statusbar = new Statusbar();
 		this.operations = new Operations( this );
 		
 		this.setNativeLookAndFeel();
