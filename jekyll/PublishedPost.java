@@ -10,7 +10,7 @@ import java.util.Date;
 public class PublishedPost extends Post
 {
 	private String date;
-	private static DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+	private static DateFormat postDateFormat = new SimpleDateFormat( "yyyy-MM-dd" ); // hh:mm:ss a" ); There is something wrong with time in Jekyll 3.0.1
 	
 	public PublishedPost( File file, Blog blog )
 	{
@@ -95,6 +95,8 @@ public class PublishedPost extends Post
 	protected String generateFrontMatter()
 	{
 		String postFrontMatter = "date: " + this.getPostDateAsString() + "\n";
+		
+		postFrontMatter += "layout: post\n";
 		
 		return postFrontMatter;
 	}
