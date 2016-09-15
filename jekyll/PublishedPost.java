@@ -92,7 +92,11 @@ public class PublishedPost extends Post
 		String loadedDate = this.frontMatter.get( "date" );
 		
 		if ( loadedDate == null )
-			this.date = postDateFormat.format( new Date() );
+		{
+			String dateComponents[] = this.getFilename().split( "-" );
+			
+			this.date = dateComponents[ 0 ] + "-" + dateComponents[ 1 ] + "-" + dateComponents[ 2 ] + " 00:00:00";
+		}
 		else
 			this.date = loadedDate;	
 	}

@@ -19,6 +19,7 @@ public abstract class Post
 	private String content;
 	private ArrayList<String> categories;
 	private ArrayList<String> tags;
+	private String filename;
 	
 	private boolean newPost;
 	protected Blog blog;
@@ -43,6 +44,7 @@ public abstract class Post
 		
 		this.file = file;
 		this.newPost = false;
+		this.filename = file.getName();
 		
 		try
 		{
@@ -71,6 +73,7 @@ public abstract class Post
 		
 		this.setTitle( title );
 		this.newPost = true;
+		this.filename = this.generateFilename();
 	}
 	
 	private void parseGeneralFrontMatter()
@@ -299,6 +302,11 @@ public abstract class Post
 	public boolean delete()
 	{
 		return this.file.delete();
+	}
+	
+	public String getFilename()
+	{
+		return this.filename;
 	}
 	
 	abstract public PostType getType();
