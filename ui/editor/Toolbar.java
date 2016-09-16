@@ -88,7 +88,7 @@ public class Toolbar extends JPanel
 			@Override
 			public void actionPerformed( ActionEvent e )
 			{
-				new Categories( currPost );
+				new CategoriesWindow( currPost );
 			}	
 		});
 		

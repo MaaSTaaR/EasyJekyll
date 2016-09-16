@@ -3,18 +3,13 @@ package ui.editor;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
@@ -22,25 +17,26 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.Document;
 
 import jekyll.Post;
-import ui.Statusbar;
 
-public class Categories
+abstract class ClassificationWindow
 {
 	private JFrame mainWin;
 	private JPanel mainPane;
 	
-	private Post currPost;
-	private JTable categoriesTable;
+	protected Post currPost;
+	private JTable dataTable;
 	private JButton removeBtn;
 	
-	String data[][];
+	private String data[][];
+	private String windowTitle;
+	private String columnName;
 	
-	public Categories( Post currPost )
+	public ClassificationWindow( Post currPost, String windowTitle )
 	{
 		this.currPost = currPost;
+		this.windowTitle = windowTitle;
 		
 		this.mainWin = new JFrame();
 		
@@ -69,7 +65,7 @@ public class Categories
 		this.mainWin.setSize( 200, 400 );
 		this.mainWin.setContentPane( this.mainPane );
 		
-		this.mainWin.setTitle( "Categories of " + this.currPost.getTitle() );
+		this.mainWin.setTitle( this.windowTitle );
 		
 		// ... //
 		
@@ -133,7 +129,7 @@ public class Categories
 			{
 				if ( !catField.getText().isEmpty() )
 				{
-					currPost.addCategory( catField.getText() );
+					addData( catField.getText() );
 					
 					loadData();
 					
@@ -154,9 +150,9 @@ public class Categories
 	
 	private void createTable()
 	{
-		this.categoriesTable = new JTable();
+		this.dataTable = new JTable();
 		
-		this.categoriesTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() 
+		this.dataTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() 
 		{
 			@Override
 			public void valueChanged( ListSelectionEvent e )
@@ -167,21 +163,26 @@ public class Categories
 		
 		this.loadData();
 		
-		JScrollPane scrolledTable = new JScrollPane( categoriesTable );
+		JScrollPane scrolledTable = new JScrollPane( dataTable );
 		
 		this.mainPane.add( scrolledTable, BorderLayout.CENTER );
 	}
 	
+	protected void setData( String[][] data )
+	{
+		this.data = data;
+	}
+	
+	protected void setColumnName( String columnName )
+	{
+		this.columnName = columnName;
+	}
+	
 	private void loadData()
 	{
-		this.data = new String[ this.currPost.getCategories().size() ][ 1 ];
+		initData();
 		
-		int s = 0;
-		
-		for ( String currCategory: this.currPost.getCategories() )
-			this.data[ s++ ][ 0 ] = currCategory;
-		
-		this.categoriesTable.setModel( new DefaultTableModel( this.data, new String[] { "Category" } ) );
+		this.dataTable.setModel( new DefaultTableModel( this.data, new String[] { this.columnName } ) );
 	}
 	
 	private void createRemovePane()
@@ -195,14 +196,16 @@ public class Categories
 			@Override
 			public void actionPerformed( ActionEvent e )
 			{
-				currPost.removeCategory( data[ categoriesTable.getSelectedRow() ][ 0 ] );
-				
+				removeData( data[ dataTable.getSelectedRow() ][ 0 ] );
 				loadData();
-				
 				currPost.save();
 			}
 		});
 		
 		this.mainPane.add( removeBtn, BorderLayout.PAGE_END );
 	}
+	
+	abstract void addData( String currData );
+	abstract void removeData( String currData );
+	abstract protected void initData();
 }
