@@ -41,6 +41,10 @@ public class Toolbar extends JPanel
 		
 		if ( this.currPost.getType() == PostType.DRAFT )
 			this.createPublishButton();
+		
+		this.createCategoriesButton();
+		//this.createTagsButton();
+		//this.createCustomFrontMatterButton();
 	}
 	
 	private void createSaveButton()
@@ -73,5 +77,21 @@ public class Toolbar extends JPanel
 		});
 		
 		this.toolbar.add( publishBtn );
+	}
+	
+	private void createCategoriesButton()
+	{
+		ActionButton categoriesBtn = new ActionButton( "Categories" );
+		
+		categoriesBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new Categories( currPost );
+			}	
+		});
+		
+		this.toolbar.add( categoriesBtn );
 	}
 }

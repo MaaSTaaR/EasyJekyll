@@ -90,7 +90,7 @@ public abstract class Post
 			String[] categories = this.frontMatter.get( "categories" ).replace( "[", "" ).replace( "]", "" ).split( "," );
 			
 			for ( int s = 0; s < categories.length; s++ )
-				this.categories.add( categories[ s ] );
+				this.categories.add( categories[ s ].trim() );
 		}
 		
 		// ... //
@@ -103,7 +103,7 @@ public abstract class Post
 			String[] tags = this.frontMatter.get( "tags" ).replace( "[", "" ).replace( "]", "" ).split( "," );
 			
 			for ( int s = 0; s < tags.length; s++ )
-				this.tags.add( tags[ s ] );
+				this.tags.add( tags[ s ].trim() );
 		}
 	}
 	
@@ -219,6 +219,15 @@ public abstract class Post
 	public void addCategory( String category )
 	{
 		this.categories.add( category );
+	}
+	
+	public void removeCategory( String category )
+	{
+		for ( int s = 0; s < this.categories.size(); s++ )
+		{
+			if ( this.categories.get( s ).equals( category ) )
+				this.categories.remove( s );
+		}
 	}
 	
 	public ArrayList<String> getTags()
