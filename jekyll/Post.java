@@ -213,6 +213,12 @@ public abstract class Post
 	
 	private String generateCustomFrontMatter()
 	{
+		if ( this.frontMatter == null )
+			return "";
+		
+		if ( this.frontMatter.isEmpty() )
+			return "";
+		
 		Iterator it = this.frontMatter.entrySet().iterator();
 		String frontMatter = "";
 		
