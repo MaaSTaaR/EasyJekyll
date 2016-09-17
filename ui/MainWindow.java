@@ -4,6 +4,9 @@ package ui;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -35,6 +39,11 @@ public class MainWindow
 	public MainWindow()
 	{
 		setNativeLookAndFeel();
+		
+		// Quick and Dirty
+		if ( Preferences.userRoot().node( "net.maastaar.easyjekyll" ).get( "blog_path", null ) == null )
+			getBlogPath();
+		
 		createMainWindow();
 		
 		// ... //
@@ -77,6 +86,44 @@ public class MainWindow
 		catch ( InstantiationException e ) {}
 		catch ( IllegalAccessException e ) {}
 		catch ( UnsupportedLookAndFeelException e ) {}
+	}
+	
+	private void getBlogPath()
+	{
+		JPanel pathPane = new JPanel();
+		JLabel pathMessage = new JLabel( "Please enter the path of the blog:" );
+		JTextField pathField = new JTextField( 15 );
+		
+		pathPane.add( pathMessage );
+		pathPane.add( pathField );
+					
+		// ... //
+		
+		JOptionPane.showOptionDialog( null, pathPane, "Blog Path", 
+										JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
+										new String[] { "OK" }, null );
+		
+		File blogDir = new File( pathField.getText() );
+		
+		if ( !blogDir.exists() )
+		{
+			JOptionPane.showMessageDialog( null, "Directory not exist" );
+			System.exit( -1 );
+		}
+		
+		if ( !blogDir.isDirectory() )
+		{
+			JOptionPane.showMessageDialog( null, "Provided path is not a directory" );
+			System.exit( -1 );
+		}
+		
+		Preferences.userRoot().node( "net.maastaar.easyjekyll" ).put( "blog_path", pathField.getText() );
+		
+		try
+		{
+			Preferences.userRoot().node( "net.maastaar.easyjekyll" ).flush();
+		}
+		catch ( BackingStoreException e ) { e.printStackTrace(); }
 	}
 	
 	private void createMainWindow()
@@ -205,7 +252,7 @@ public class MainWindow
 		
 		// ... //
 		
-		ActionButton settingBtn = new ActionButton( "Deployment Settings" );
+		ActionButton settingBtn = new ActionButton( "Settings" );
 		
 		settingBtn.addActionListener( new ActionListener()
 		{

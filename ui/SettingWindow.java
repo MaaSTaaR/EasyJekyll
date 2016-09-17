@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -27,6 +28,7 @@ public class SettingWindow
 	private JTextField usernameValue;
 	private JTextField uploadDirValue;
 	private JTextField jekyllCmdValue;
+	private JTextField blogPathValue;
 	
 	public SettingWindow()
 	{
@@ -58,7 +60,7 @@ public class SettingWindow
 		
 		this.mainWin = new JFrame( "Settings" );
 		
-		this.mainWin.setSize( 400, 340 );
+		this.mainWin.setSize( 400, 400 );
 		this.mainWin.setContentPane( mainPane );
 		
 		// ... //
@@ -97,6 +99,7 @@ public class SettingWindow
 		this.createUsername();
 		this.createUploadDirectory();
 		this.createJekyllCommandPath();
+		this.createBlogPath();
 		this.createSaveButton();
 	}
 	
@@ -179,6 +182,22 @@ public class SettingWindow
 		this.mainPane.add( jekyllCmdValue );
 	}
 	
+	private void createBlogPath()
+	{
+		
+		JLabel blogPathLabel = new JLabel( "Blog Path" );
+		
+		this.mainPane.add( blogPathLabel );
+		
+		// ... //
+		
+		this.blogPathValue = new JTextField( 15 );
+		
+		this.blogPathValue.setText( this.prefs.get( "blog_path", null ) );
+		
+		this.mainPane.add( this.blogPathValue );
+	}
+	
 	private void createSaveButton()
 	{
 		JButton saveBtn = new JButton( "Save" );
@@ -188,11 +207,14 @@ public class SettingWindow
 			@Override
 			public void actionPerformed( ActionEvent ev )
 			{
+				boolean restartMessage = ( prefs.get( "blog_path", null ) != blogPathValue.getText() );
+					
 				prefs.put( "ftp_host", hostValue.getText() );
 				prefs.put( "ftp_port", portValue.getText() );
 				prefs.put( "ftp_username", usernameValue.getText() );
 				prefs.put( "ftp_upload_dir", uploadDirValue.getText() );
 				prefs.put( "jekyll_command", jekyllCmdValue.getText() );
+				prefs.put( "blog_path", blogPathValue.getText() );
 				
 				try
 				{
@@ -201,6 +223,9 @@ public class SettingWindow
 					mainWin.dispose();
 				}
 				catch ( BackingStoreException e ) { e.printStackTrace(); }
+				
+				if ( restartMessage )
+					JOptionPane.showMessageDialog( null, "EasyJekyll must be restarted" );
 			}	
 		});
 		

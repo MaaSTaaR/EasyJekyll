@@ -23,6 +23,9 @@ public class Blog
 		this.postsDir = new File( this.path.getPath() + "/_posts" );
 		this.draftsDir = new File( this.path.getPath() + "/_drafts" );
 		this.siteDir = new File( this.path.getPath() + "/_site" );
+		
+		if ( !this.draftsDir.exists() )
+			this.draftsDir.mkdir();
 	}
 	
 	public PublishedPost createPost( String title )

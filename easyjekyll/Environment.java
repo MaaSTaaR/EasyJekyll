@@ -16,9 +16,10 @@ public class Environment
 	
 	private Environment()
 	{
-		this.currBlog = new Blog( "/home/maastaar/jekyll/mqh_EasyJekyll_Test" );
-		this.fonts = new Fonts();
 		this.prefs = Preferences.userRoot().node( "net.maastaar.easyjekyll" );
+		
+		this.currBlog = new Blog( this.prefs.get( "blog_path", null ) );
+		this.fonts = new Fonts();
 		this.jekyll = new Jekyll( this.prefs.get( "jekyll_command", "jekyll" ), this.currBlog.getPath() );
 	}
 	
