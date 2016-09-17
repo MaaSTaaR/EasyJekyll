@@ -55,6 +55,13 @@ public class PublishedPost extends Post
 	
 	public String getDate()
 	{
+		if ( this.date == null )
+		{
+			this.initDate();
+			
+			this.date = postDateFormat.format( new Date() );
+		}
+		
 		return this.date.split( " " )[ 0 ];
 	}
 	
