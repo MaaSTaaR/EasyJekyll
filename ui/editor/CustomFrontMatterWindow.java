@@ -111,74 +111,7 @@ class CustomFrontMatterWindow
 	
 	private void createWidgets()
 	{
-		this.createAddPane();
 		this.createTable();
-		this.createRemovePane();
-	}
-	
-	private void createAddPane()
-	{
-		JPanel addPane = new JPanel();
-		
-		final JTextField catField = new JTextField( 10 );
-		final JButton addBtn = new JButton( "Add" );
-		
-		// ... //
-		
-		addBtn.setEnabled( false );
-		
-		// ... //
-		
-		catField.getDocument().addDocumentListener( new DocumentListener() 
-		{
-			@Override
-			public void changedUpdate( DocumentEvent e ) { }
-
-			@Override
-			public void insertUpdate( DocumentEvent e )
-			{
-				this.enableAddBtn( e );
-			}
-
-			@Override
-			public void removeUpdate( DocumentEvent e )
-			{
-				this.enableAddBtn( e );
-			}
-			
-			private void enableAddBtn( DocumentEvent e )
-			{
-				addBtn.setEnabled( e.getDocument().getLength() > 0 );
-			}
-			
-		});
-		
-		// ... //
-		
-		addBtn.addActionListener( new ActionListener()
-		{
-			@Override
-			public void actionPerformed( ActionEvent e )
-			{
-				if ( !catField.getText().isEmpty() )
-				{
-					//addData( catField.getText() );
-					
-					loadData();
-					
-					catField.setText( null );
-					
-					currPost.save();
-				}
-			}
-		});
-		
-		// ... //
-		
-		addPane.add( catField );
-		addPane.add( addBtn );
-		
-		this.mainPane.add( addPane, BorderLayout.PAGE_START );
 	}
 	
 	private void createTable()
@@ -200,17 +133,7 @@ class CustomFrontMatterWindow
 		
 		this.mainPane.add( scrolledTable, BorderLayout.CENTER );
 	}
-	
-	protected void setData( String[][] data )
-	{
-		this.data = data;
-	}
-	
-	/*protected void setColumnName( String columnName )
-	{
-		this.columnName = columnName;
-	}*/
-	
+		
 	private void loadData()
 	{
 		CustomFrontMatters customFrontMatters = new CustomFrontMatters();
@@ -249,28 +172,4 @@ class CustomFrontMatterWindow
 			}	
 		});
 	}
-	
-	private void createRemovePane()
-	{
-		this.removeBtn = new JButton( "Remove" );
-		
-		this.removeBtn.setEnabled( false );
-		
-		this.removeBtn.addActionListener( new ActionListener()
-		{
-			@Override
-			public void actionPerformed( ActionEvent e )
-			{
-				//removeData( data[ dataTable.getSelectedRow() ][ 0 ] );
-				loadData();
-				currPost.save();
-			}
-		});
-		
-		this.mainPane.add( removeBtn, BorderLayout.PAGE_END );
-	}
-	
-	/*abstract void addData( String currData );
-	abstract void removeData( String currData );
-	abstract protected void initData();*/
 }
