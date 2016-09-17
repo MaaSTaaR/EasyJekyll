@@ -1,5 +1,9 @@
 package ui.editor;
 
+import java.util.HashMap;
+
+import easyjekyll.frontmatter.CustomFrontMatter;
+import easyjekyll.frontmatter.CustomFrontMatters;
 import jekyll.Draft;
 import jekyll.Post;
 import jekyll.Post.PostType;
@@ -19,6 +23,17 @@ public class Operations
 	{
 		this.currPost.setTitle( this.editor.getTitle() );
 		this.currPost.setContent( this.editor.getContent() );
+		
+		// ... //
+		
+		CustomFrontMatters customFrontMatters = new CustomFrontMatters();
+		HashMap<String, String> postFrontMatters = this.currPost.getFrontMatter();
+		
+		for ( CustomFrontMatter currFrontMatter: customFrontMatters.getFrontMatters() )
+			if ( !postFrontMatters.containsKey( currFrontMatter.getKey() ) )
+				postFrontMatters.put( currFrontMatter.getKey(), currFrontMatter.getValue() );
+		
+		// ... //
 		
 		this.editor.saveNotification( this.currPost.save() );
 	}

@@ -99,6 +99,9 @@ public class PublishedPost extends Post
 		}
 		else
 			this.date = loadedDate;	
+		
+		// Removing parsed front-matters such that only custom ones remain in front-matter hash table.
+		this.frontMatter.remove( "date" );
 	}
 
 	@Override

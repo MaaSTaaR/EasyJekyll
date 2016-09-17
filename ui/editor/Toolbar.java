@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import easyjekyll.frontmatter.CustomFrontMatters;
 import ui.ActionButton;
 import jekyll.Post;
 import jekyll.Post.PostType;
@@ -43,8 +44,8 @@ public class Toolbar extends JPanel
 			this.createPublishButton();
 		
 		this.createCategoriesButton();
-		//this.createTagsButton();
-		//this.createCustomFrontMatterButton();
+		this.createTagsButton();
+		this.createCustomFrontMattersButton();
 	}
 	
 	private void createSaveButton()
@@ -93,5 +94,37 @@ public class Toolbar extends JPanel
 		});
 		
 		this.toolbar.add( categoriesBtn );
+	}
+	
+	private void createTagsButton()
+	{
+		ActionButton tagsBtn = new ActionButton( "Tags" );
+		
+		tagsBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new TagsWindow( currPost );
+			}	
+		});
+		
+		this.toolbar.add( tagsBtn );
+	}
+	
+	private void createCustomFrontMattersButton()
+	{
+		ActionButton frontmattersBtn = new ActionButton( "Custom Frontmatters" );
+		
+		frontmattersBtn.addActionListener( new ActionListener() 
+		{
+			@Override
+			public void actionPerformed( ActionEvent e )
+			{
+				new CustomFrontMatterWindow( editor );
+			}	
+		});
+		
+		this.toolbar.add( frontmattersBtn );
 	}
 }

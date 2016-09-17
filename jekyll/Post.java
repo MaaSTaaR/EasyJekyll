@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 public abstract class Post
 {
@@ -105,6 +106,19 @@ public abstract class Post
 			for ( int s = 0; s < tags.length; s++ )
 				this.tags.add( tags[ s ].trim() );
 		}
+		
+		// ... //
+		
+		// Removing parsed front-matters such that only custom ones remain in front-matter hash table.
+		
+		this.frontMatter.remove( "title" );
+		this.frontMatter.remove( "layout" );
+		this.frontMatter.remove( "category" );
+		this.frontMatter.remove( "categories" );
+		this.frontMatter.remove( "tag" );
+		this.frontMatter.remove( "tags" );
+		
+		// ... //
 	}
 	
 	public boolean save()
@@ -134,7 +148,7 @@ public abstract class Post
 			}
 		}
 		
-		String frontMatter = "---\n" + this.generateGeneralFrontMatter() + this.generateFrontMatter() + "---\n";
+		String frontMatter = "---\n" + this.generateGeneralFrontMatter() + this.generateFrontMatter() + this.generateCustomFrontMatter() +  "---\n";
 		
 		fileContent = frontMatter + this.getContent();
 		
@@ -197,6 +211,21 @@ public abstract class Post
 		return generalFrontMatter;
 	}
 	
+	private String generateCustomFrontMatter()
+	{
+		Iterator it = this.frontMatter.entrySet().iterator();
+		String frontMatter = "";
+		
+		while ( it.hasNext() )
+		{
+			Entry<String, String> currFrontMatter = (Entry) it.next();
+			
+			frontMatter += currFrontMatter.getKey() + ": " + currFrontMatter.getValue() + "\n";
+		}
+		
+		return frontMatter;
+	}
+	
 	public String getTitle()
 	{
 		return this.title;
@@ -240,6 +269,15 @@ public abstract class Post
 		this.tags.add( tag );
 	}
 	
+	public void removeTag( String tag )
+	{
+		for ( int s = 0; s < this.tags.size(); s++ )
+		{
+			if ( this.tags.get( s ).equals( tag ) )
+				this.tags.remove( s );
+		}
+	}
+	
 	public String getContent()
 	{
 		return this.content;
@@ -255,7 +293,7 @@ public abstract class Post
 		return this.postDir;
 	}
 	
-	protected HashMap<String, String> getFrontMatter()
+	public HashMap<String, String> getFrontMatter()
 	{
 		return this.frontMatter;
 	}
