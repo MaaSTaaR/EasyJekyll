@@ -207,7 +207,7 @@ public class SettingWindow
 			@Override
 			public void actionPerformed( ActionEvent ev )
 			{
-				boolean restartMessage = ( prefs.get( "blog_path", null ) != blogPathValue.getText() );
+				boolean restartMessage = ( !prefs.get( "blog_path", null ).equals( blogPathValue.getText() ) );
 					
 				prefs.put( "ftp_host", hostValue.getText() );
 				prefs.put( "ftp_port", portValue.getText() );

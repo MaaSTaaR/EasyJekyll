@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import easyjekyll.frontmatter.CustomFrontMatters;
 import ui.ActionButton;
 import jekyll.Post;
 import jekyll.Post.PostType;

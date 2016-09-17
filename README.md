@@ -1,0 +1,1 @@
+EasyJekyll is a GUI front-end for Jekyll to let you edit your blog posts easily.
