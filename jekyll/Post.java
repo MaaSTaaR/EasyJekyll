@@ -75,6 +75,7 @@ public abstract class Post
 		this.setTitle( title );
 		this.newPost = true;
 		this.filename = this.generateFilename();
+		this.frontMatter = new HashMap<String, String>();
 	}
 	
 	private void parseGeneralFrontMatter()
